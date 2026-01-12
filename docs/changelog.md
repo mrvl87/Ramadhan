@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- **Credit Consumption Engine**: Added `public.usage_log` table and `consume_credit` database function for transactional credit deduction and auditing.
+- **Economic Data Model**: Added `pro_expires_at` to `public.users` and `get_user_entitlement` database function for managing Free/Pro states.
 - **Login Page**: Implemented `src/app/login/page.tsx` with email/password and Google OAuth support.
 - **Supabase Client**: Configured `src/lib/supabase.ts` for client-side authentication and `@supabase/ssr` for server-side.
 - **Auth Routes**: Added `auth/callback` for OAuth and `auth/signout` for logging out.
