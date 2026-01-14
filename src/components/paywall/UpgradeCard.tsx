@@ -2,7 +2,12 @@ import { Check, Star, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-export function UpgradeCard() {
+interface UpgradeCardProps {
+    onUpgrade?: () => void
+    isLoading?: boolean
+}
+
+export function UpgradeCard({ onUpgrade, isLoading }: UpgradeCardProps) {
     return (
         <Card className="w-full border-green-500/20 bg-gradient-to-b from-green-50/50 to-transparent dark:from-green-950/20">
             <CardHeader>
@@ -44,8 +49,13 @@ export function UpgradeCard() {
                 </div>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white" size="lg">
-                    Upgrade to Pro
+                <Button
+                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                    size="lg"
+                    onClick={onUpgrade}
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Loading..." : "Upgrade to Pro"}
                 </Button>
                 <div className="text-xs text-center text-muted-foreground">
                     Or <span className="underline cursor-pointer">buy credit pack</span>
