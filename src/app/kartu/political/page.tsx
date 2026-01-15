@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { getTemplates } from "@/lib/templates" // Ensure this is client-safe or wrapped
 import { AssetGrid } from "@/components/political/AssetGrid"
+import { ImageUploader } from "@/components/ui/ImageUploader"
 import { PaywallModal } from "@/components/paywall/PaywallModal"
 import { TemplateCollection } from "@/types/templates"
 import { Loader2, UploadCloud, ChevronRight, Wand2 } from "lucide-react"
@@ -18,6 +19,8 @@ export default function PoliticalBuilderPage() {
 
     // Selection State
     const [imageUrl, setImageUrl] = useState("")
+    const [detectedGender, setDetectedGender] = useState<'male' | 'female' | 'unknown'>('unknown')
+    const [genderLoading, setGenderLoading] = useState(false)
     const [selectedPartyId, setSelectedPartyId] = useState("")
     const [selectedCostumeId, setSelectedCostumeId] = useState("")
 
@@ -35,6 +38,29 @@ export default function PoliticalBuilderPage() {
             setLoading(false)
         })
     }, [])
+
+    // Handler: Gender Detection
+    const handleUploadComplete = async (url: string) => {
+        setImageUrl(url)
+        if (!url) return // Clear state if image removed
+
+        setGenderLoading(true)
+        try {
+            const res = await fetch('/api/ai/detect-gender', {
+                method: 'POST',
+                body: JSON.stringify({ imageUrl: url })
+            })
+            const data = await res.json()
+            if (data.gender) {
+                setDetectedGender(data.gender)
+                console.log("Detected Gender:", data.gender)
+            }
+        } catch (e) {
+            console.error("Gender detection failed", e)
+        } finally {
+            setGenderLoading(false)
+        }
+    }
 
     // Handler: Selection Logic with Gating
     const handleAssetSelect = (id: string, isPremium: boolean, type: 'party' | 'costume') => {
@@ -65,7 +91,7 @@ export default function PoliticalBuilderPage() {
                     party,
                     costume,
                     attributes,
-                    user_gender: 'male', // TODO: Add Gender Selector
+                    user_gender: detectedGender === 'female' ? 'female' : 'male', // Default to male if unknown
                     user_name: 'Calon Pemimpin'
                 })
             })
@@ -84,6 +110,13 @@ export default function PoliticalBuilderPage() {
             setGenerating(false)
         }
     }
+
+    // Helper: Filter Costumes
+    const filteredCostumes = templates?.costumes.filter(c => {
+        if (detectedGender === 'unknown') return true
+        if (c.gender === 'unisex') return true
+        return c.gender === detectedGender
+    }) || []
 
     if (loading) return <div className="h-screen flex items-center justify-center"><Loader2 className="animate-spin" /></div>
 
@@ -119,8 +152,17 @@ export default function PoliticalBuilderPage() {
                     ))}
                 </div>
 
-                {/* Action Button (Desktop Specific) */}
-                <div className="mt-auto hidden md:block">
+                {/* Desktop Nav Actions */}
+                <div className="mt-auto hidden md:flex flex-col gap-3">
+                    {step > 1 && step < 4 && (
+                        <button
+                            onClick={() => setStep(step - 1 as any)}
+                            className="w-full py-2 border border-gray-300 rounded-xl font-medium text-gray-600 hover:bg-gray-50"
+                        >
+                            Back
+                        </button>
+                    )}
+
                     {step === 3 && (
                         <button
                             onClick={handleGenerate}
@@ -140,24 +182,48 @@ export default function PoliticalBuilderPage() {
                 {/* Step 1: Upload */}
                 {step === 1 && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-                        <h2 className="text-2xl font-bold">First, upload your best photo</h2>
-                        <div className="border-4 border-dashed border-gray-200 rounded-3xl h-64 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer relative overflow-hidden group">
-                            <input
-                                type="text"
-                                placeholder="Paste Image URL for MVP (e.g. https://...)"
-                                className="z-20 w-3/4 p-2 border rounded"
-                                value={imageUrl}
-                                onChange={(e) => setImageUrl(e.target.value)}
-                            />
-                            <p className="mt-2 text-gray-400 text-sm">(For MVP, paste a URL directly)</p>
+                        <div className="text-center md:text-left">
+                            <h2 className="text-2xl font-bold">First, upload your best photo</h2>
+                            <p className="text-gray-500">Make sure your face is clearly visible for the best AI results.</p>
                         </div>
-                        {imageUrl && (
-                            <div className="flex justify-end">
-                                <button onClick={() => setStep(2)} className="bg-black text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2">
-                                    Next Step <ChevronRight className="w-4 h-4" />
-                                </button>
-                            </div>
-                        )}
+
+                        <ImageUploader
+                            onUploadComplete={handleUploadComplete}
+                            currentImageUrl={imageUrl}
+                        />
+
+                        {/* Status & Next Action */}
+                        <div className="min-h-[80px] flex flex-col items-center justify-center">
+                            {genderLoading ? (
+                                <div className="flex flex-col items-center gap-2 text-indigo-600 bg-indigo-50 px-6 py-4 rounded-xl animate-pulse w-full">
+                                    <div className="flex items-center gap-2">
+                                        <Loader2 className="animate-spin w-5 h-5" />
+                                        <span className="font-semibold">AI is analyzing your photo...</span>
+                                    </div>
+                                    <p className="text-xs opacity-80">Detecting features for best costume match</p>
+                                </div>
+                            ) : imageUrl ? (
+                                <div className="w-full text-center space-y-4 animate-in fade-in slide-in-from-bottom-2">
+                                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                        <p className="text-sm text-gray-600">
+                                            AI Detection Result: <span className="font-bold text-indigo-600 text-lg capitalize mx-1">{detectedGender}</span>
+                                        </p>
+                                        <p className="text-xs text-gray-400 mt-1">
+                                            We've filtered the costumes for you. You can adjust this manually in the next steps.
+                                        </p>
+                                    </div>
+
+                                    <div className="flex justify-end">
+                                        <button
+                                            onClick={() => setStep(2)}
+                                            className="bg-black text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-900 hover:scale-[1.02] transition-all shadow-lg flex items-center gap-2"
+                                        >
+                                            Continue to Party Selection <ChevronRight className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : null}
+                        </div>
                     </div>
                 )}
 
@@ -181,23 +247,44 @@ export default function PoliticalBuilderPage() {
                             isPro={isPro}
                         />
 
-                        {selectedPartyId && (
-                            <div className="flex justify-end fixed bottom-6 right-6 md:static">
-                                <button onClick={() => setStep(3)} className="bg-black text-white px-8 py-3 rounded-full shadow-xl font-medium flex items-center gap-2 z-50">
+                        <div className="flex justify-between items-center fixed bottom-6 left-6 right-6 md:static">
+                            <button onClick={() => setStep(1)} className="md:hidden px-4 py-2 border rounded-lg bg-white shadow">
+                                Back
+                            </button>
+                            {selectedPartyId && (
+                                <button onClick={() => setStep(3)} className="bg-black text-white px-8 py-3 rounded-full shadow-xl font-medium flex items-center gap-2 z-50 ml-auto">
                                     Next: Choose Attire <ChevronRight className="w-4 h-4" />
                                 </button>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 )}
 
                 {/* Step 3: Costume Selection */}
                 {step === 3 && templates && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-                        <h2 className="text-2xl font-bold">Select your Official Attire</h2>
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">Select your Official Attire</h2>
+
+                            {/* Manual Gender Toggle */}
+                            <div className="flex bg-gray-100 p-1 rounded-lg">
+                                {(['male', 'female', 'unknown'] as const).map(g => (
+                                    <button
+                                        key={g}
+                                        onClick={() => setDetectedGender(g)}
+                                        className={cn(
+                                            "px-3 py-1 rounded-md text-sm font-medium transition-all capitalize",
+                                            detectedGender === g ? "bg-white shadow text-indigo-600" : "text-gray-500 hover:text-gray-700"
+                                        )}
+                                    >
+                                        {g === 'unknown' ? 'All' : g}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
 
                         <AssetGrid
-                            items={templates.costumes.map(c => ({
+                            items={filteredCostumes.map(c => ({
                                 id: c.id,
                                 name: c.name,
                                 image_url: c.base_image_url,
@@ -208,12 +295,21 @@ export default function PoliticalBuilderPage() {
                             isPro={isPro}
                         />
 
-                        {/* Mobile Generate Button */}
-                        <div className="md:hidden mt-8">
+                        {filteredCostumes.length === 0 && (
+                            <div className="text-center py-10 text-gray-500">
+                                No costumes found for {detectedGender}. Try different gender or upload a new photo.
+                            </div>
+                        )}
+
+                        {/* Mobile Nav */}
+                        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t md:hidden flex gap-3">
+                            <button onClick={() => setStep(2)} className="px-4 py-2 border rounded-lg bg-white">
+                                Back
+                            </button>
                             <button
                                 onClick={handleGenerate}
                                 disabled={generating || !selectedCostumeId}
-                                className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                                className="flex-1 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
                             >
                                 {generating ? <Loader2 className="animate-spin" /> : <Wand2 className="w-4 h-4" />}
                                 {generating ? "Generating..." : "Generate Poster"}
@@ -224,7 +320,7 @@ export default function PoliticalBuilderPage() {
 
                 {/* Step 4: Result */}
                 {step === 4 && resultImage && (
-                    <div className="flex flex-col items-center animate-in zoom-in-90 duration-300">
+                    <div className="flex flex-col items-center animate-in zoom-in-90 duration-300 mb-20">
                         <h2 className="text-3xl font-bold mb-6">Your Campaign Poster is Ready!</h2>
                         <div className="relative rounded-xl overflow-hidden shadow-2xl border-4 border-white max-w-md w-full">
                             <img src={resultImage} alt="Political Card" className="w-full h-auto" />

@@ -53,7 +53,9 @@ ON CONFLICT (slug) DO NOTHING;
 -- Seed Data: Costumes
 INSERT INTO public.costume_templates (name, gender, is_premium) VALUES
 ('Baju Koko Polos', 'male', false),
-('Jas Pejabat Emas', 'male', true)
+('Jas Pejabat Emas', 'male', true),
+('Kebaya Nasional (Free)', 'female', false),
+('Hijab Pejabat (Premium)', 'female', true)
 ON CONFLICT DO NOTHING;
 -- Note: Avoiding ON CONFLICT on ID since we don't fix IDs. Duplicates might happen if re-run without truncation or slug constraint on name. 
 -- Adding unique constraint on name for costumes/attributes strictly for seed idempotency isn't schema-required but good practices.

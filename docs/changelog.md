@@ -3,6 +3,17 @@
 ## [Unreleased]
 
 ### Added
+### Added
+- **Layer 2.P.4: Image Intelligence & Secure Upload** [NEW]
+  - **Real Photo Upload**: Replaced URL input with secure `ImageUploader` (Supabase Storage).
+  - **Gender Detection**: Integrated `fal-ai/moondream3-preview` to detect gender from uploaded photos.
+  - **Smart Asset Filtering**: Automatically filters costumes based on detected gender.
+  - **Manual Override**: Added UI to manually correct gender selection.
+- **Layer 2.P.3: Political Card UI**
+  - **Nano Banana Pro**: Integrated `fal-ai/nano-banana-pro/edit` for high-quality template generation.
+  - **Builder UI**: Multi-step wizard (`/kartu/political`) for Party/Costume selection.
+  - **Premium Gating**: "Lock" overlays for Pro assets, triggering `PaywallModal`.
+  - **Template Data**: SQL migrations for Parties, Costumes (Male/Female), and Attributes.
 - **Fal.ai Pipeline**: Implemented `src/lib/fal.ts` for AI image generation and `src/app/api/ai/generate-card` endpoint.
 - **Supabase Storage**: Configured `cards` bucket with `docs/migrations/003_storage_setup.sql`.
 - **Layer 1.4: Payment System (Xendit)**
