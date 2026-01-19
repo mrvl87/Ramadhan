@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 
 export type GatekeeperResult =
-    | { allowed: true; is_pro: boolean; remaining_credits: number; reason?: never; upgrade_url?: never }
-    | { allowed: false; reason: "NO_CREDITS" | "NOT_LOGGED_IN"; upgrade_url: string; is_pro?: never; remaining_credits?: never }
+    | { allowed: true; is_pro: boolean; remaining_credits: number; userId: string; reason?: never; upgrade_url?: never }
+    | { allowed: false; reason: "NO_CREDITS" | "NOT_LOGGED_IN"; upgrade_url: string; is_pro?: never; remaining_credits?: never; userId?: never }
 
 /**
  * STRICT GATEKEEPER
@@ -50,6 +50,7 @@ export async function requireEntitlement(feature_name: string): Promise<Gatekeep
     return {
         allowed: true,
         is_pro: data.is_pro,
-        remaining_credits: data.remaining_credits
+        remaining_credits: data.remaining_credits,
+        userId: user.id
     }
 }
