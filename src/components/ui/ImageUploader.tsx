@@ -9,9 +9,10 @@ interface ImageUploaderProps {
     onUploadComplete: (url: string) => void
     currentImageUrl?: string
     className?: string
+    folder?: string
 }
 
-export function ImageUploader({ onUploadComplete, currentImageUrl, className }: ImageUploaderProps) {
+export function ImageUploader({ onUploadComplete, currentImageUrl, className, folder = 'uploads' }: ImageUploaderProps) {
     const [dragActive, setDragActive] = useState(false)
     const [uploading, setUploading] = useState(false)
     const [preview, setPreview] = useState<string | null>(currentImageUrl || null)
@@ -65,7 +66,7 @@ export function ImageUploader({ onUploadComplete, currentImageUrl, className }: 
             const fileName = `${user.id}/${Date.now()}.${fileExt}`
 
             const { error: uploadError } = await supabase.storage
-                .from('uploads')
+                .from('uploads') // We stick to 'uploads' bucket as per migration
                 .upload(fileName, file)
 
             if (uploadError) throw uploadError

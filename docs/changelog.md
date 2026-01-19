@@ -3,7 +3,19 @@
 ## [Unreleased]
 
 ### Added
+### Changed
+- **Product Refocus**: Shifted main branch strategy back to consumer roots (Family, Menu, Gift).
+- **Architecture**: Refactored into modular `src/features/` directory structure.
+- **Removed Features**: Moved Political/Election features to `refactor/political-ui-v2` branch.
+
 ### Added
+- **Unified AI Pipeline**: `src/lib/ai/generate.ts` centralizes all AI calls and credit consumption.
+- **Feature: AI Family Photo**: New simplified flow for Eid portraits (`/kartu/family`).
+- **Feature: Ramadan Meal Planner**: New LLM-powered menu generator (`/menu`).
+- **Feature: Gift Assistant**: New LLM-powered gift recommender (`/gift`).
+- **Documentation**: Added `ARCHITECTURE.md`, `FEATURES.md`, `ROADMAP.md`.
+
+### Added (Previous)
 - **Layer 2.P.4: Image Intelligence & Secure Upload** [NEW]
   - **Real Photo Upload**: Replaced URL input with secure `ImageUploader` (Supabase Storage).
   - **Gender Detection**: Integrated `fal-ai/moondream3-preview` to detect gender from uploaded photos.
