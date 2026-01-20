@@ -3,6 +3,20 @@
 ## [Unreleased]
 
 ### Added
+- **v0.5.0 (Jan 19) - AI Family Photo & Greeting Engine Update**
+    - **Feature**: Advanced AI Family Photo (`/kartu/family`).
+        - **AI Engine**: Integrated `fal.subscribe` SDK for robust generation.
+        - **Aspect Ratio**: Added UI to select Square, Portrait, or Landscape.
+        - **Smart Caption**: 
+            - Integrated `google/gemini-2.5-flash` via Fal.ai Proxy.
+            - Auto-generates greetings randomly from 6 themes (e.g., "Kemenangan", "Kehangatan").
+            - **Text Positioning**: Injected into image prompt as "Include text '...' written elegantly at the bottom".
+    - **Configuration**:
+        - Created `src/features/family-photo/ai-config.ts` to separate Prompt Logic & Model ID.
+    - **Prompt Engineering**:
+        - Refined Greeting Prompt: "Warm, Casual, & Natural" tone (10-15 words).
+        - Added strict constraints (No fillers, no quotes).
+    
 ### Changed
 - **Product Refocus**: Shifted main branch strategy back to consumer roots (Family, Menu, Gift).
 - **Architecture**: Refactored into modular `src/features/` directory structure.

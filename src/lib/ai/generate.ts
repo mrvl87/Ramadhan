@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { fal } from '@fal-ai/serverless-client';
+import { generateFalImage, uploadImageToSupabase } from '@/lib/fal';
 import { openRouter } from '@/lib/openrouter';
 import { NextResponse } from 'next/server';
 
@@ -15,11 +15,10 @@ export async function generateContent({ featureType, userInput, userId }: Genera
     const supabase = await createClient();
 
     // 1. Check & Consume Credits (Unified Logic)
-    // We assume the DB function 'consume_credits' handles the check and deduction
     const { data: creditResult, error: creditError } = await supabase
-        .rpc('consume_credits', {
-            p_user_id: userId,
-            p_amount: 1 // Standard cost, can be dynamic
+        .rpc('consume_credit', {
+            target_user_id: userId,
+            feature_name: featureType
         });
 
     if (creditError || !creditResult) {
@@ -33,13 +32,35 @@ export async function generateContent({ featureType, userInput, userId }: Genera
         switch (featureType) {
             case 'family-photo':
                 // Fal.ai Generation
-                result = await fal.subscribe('fal-ai/flux/schnell', {
-                    input: {
-                        prompt: userInput.prompt,
-                        image_url: userInput.imageUrl,
-                        // Add other flux params if needed
-                    }
-                });
+                console.log("Triggering Fal.ai generation (via generateFalImage wrapper)...");
+                try {
+                    const tempImageUrl = await generateFalImage(userInput.prompt, {
+                        imageUrl: userInput.imageUrl,
+                        aspectRatio: userInput.aspectRatio
+                    });
+
+                    // 3. Persistent Save & Watermark Logic
+                    // We name it 'family_photo' to match bucket structure expectations if any
+                    // Use the 'is_pro' flag returned by consume_credit
+                    const isPro = creditResult.is_pro || false;
+                    console.log("Credit Check Result:", JSON.stringify(creditResult, null, 2));
+                    console.log("Determined isPro Status:", isPro);
+
+                    console.log("Saving to Supabase Storage...");
+                    const finalUrl = await uploadImageToSupabase(tempImageUrl, userId, 'family_photo', isPro);
+
+                    // Standardize result format
+                    // Return the PERMANENT URL, not the temp Fal URL
+                    result = {
+                        images: [{ url: finalUrl }]
+                    };
+
+                    console.log("Generation completed. Final URL:", finalUrl);
+                } catch (falError) {
+                    console.error("Fal.ai generation error:", falError);
+                    throw falError;
+                }
+
                 break;
 
             case 'ramadan-menu':

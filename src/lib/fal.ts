@@ -28,30 +28,42 @@ export function constructPrompt(type: string, theme: string, inputs: { text?: st
     );
 }
 
-export async function generateFalImage(prompt: string) {
-    // Switching to DIRECT HTTP CALL to diagnose Auth issues
-    // Endpoint: fal-ai/flux/schnell (Fast, cheap, synchronous)
+export async function generateFalImage(prompt: string, options?: { imageUrl?: string; aspectRatio?: string }) {
+    // Switching to fal-ai/nano-banana/edit as requested
+    const url = "https://fal.run/fal-ai/nano-banana/edit";
 
-    const url = "https://fal.run/fal-ai/flux/schnell";
-
-    console.log("Calling Fal.ai (Flux Schnell)...");
+    console.log("Calling Fal.ai (Nano Banana Edit)...");
 
     try {
+        // Map user aspect ratio to Fal image_size
+        let imageSize = "square_hd";
+        if (options?.aspectRatio) {
+            switch (options.aspectRatio) {
+                case "portrait": imageSize = "portrait_4_3"; break;
+                case "landscape": imageSize = "landscape_16_9"; break;
+                // default square
+            }
+        }
+
+        const body: any = {
+            prompt: prompt,
+            image_size: imageSize,
+            // Nano Banana Edit expects 'image_urls' (plural, array)
+        };
+
+        if (options?.imageUrl) {
+            body.image_urls = [options.imageUrl];
+        }
+
+        console.log("Fal Request Body:", JSON.stringify(body, null, 2));
+
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Authorization": `Key ${FAL_KEY}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                prompt: prompt,
-                image_size: "square_hd",
-                enable_safety_checker: true,
-                num_inference_steps: 4,
-                // Add safety net
-                // negative_prompt: NEGATIVE_PROMPT // Flux Schnell sometimes ignores this, but simpler Flux Pro supports it.
-                // We'll trust the prompt engine's positive guidance for Schnell.
-            }),
+            body: JSON.stringify(body),
         });
 
         if (!response.ok) {
@@ -61,17 +73,81 @@ export async function generateFalImage(prompt: string) {
         }
 
         const result = await response.json();
+        console.log("Fal Response:", JSON.stringify(result, null, 2));
 
-        // Flux Schnell usually returns { images: [{ url: "..." }] }
+        // Nano Banana returns { images: [{ url: "..." }] } similar to others
         if (result.images && result.images.length > 0) {
             return result.images[0].url;
         } else {
+            console.error("Fal Response missing image URL:", result);
             throw new Error("No image URL in Fal response: " + JSON.stringify(result));
         }
 
     } catch (error: any) {
         console.error("Fal Generation Failed:", error);
         throw new Error(error.message || "Unknown Fal Error");
+    }
+}
+
+import { fal } from "@fal-ai/client";
+
+// ... other imports
+
+export async function generateFalLLM(prompt: string, model: string = "google/gemini-2.0-flash-exp:free") {
+    console.log(`Calling Fal LLM Proxy via SDK (${model})...`);
+
+    // Ensure config is set if not already global (though safe to set again)
+    fal.config({
+        credentials: FAL_KEY, // Use the extracted key string 
+    });
+
+    try {
+        const result: any = await fal.subscribe("openrouter/router", {
+            input: {
+                prompt: prompt, // Use 'prompt' as per user example (though 'messages' is standard for chat, user example used 'prompt')
+                // Wait, user example: prompt: "Write...", model: "..."
+                // Use user example structure exactly.
+                model: model,
+                temperature: 1
+            },
+            logs: true,
+            onQueueUpdate: (update) => {
+                if (update.status === "IN_PROGRESS") {
+                    update.logs.map((log) => log.message).forEach(console.log);
+                }
+            },
+        });
+
+        console.log("Fal LLM SDK Result:", JSON.stringify(result, null, 2));
+
+        // Result data structure from Fal usually wraps the output. 
+        // Based on user example snippet: console.log(result.data);
+        // We need to extracting the text. OpenRouter usually returns standard OpenAI chat completion json.
+        // If result.data is that JSON, we look for choices[0].message.content or similar.
+        // Let's inspect result.data in logs if possible, but for code we'll try to be robust.
+
+        if (result.data) {
+            // Handle if result.data is a string (rare) or object
+            if (typeof result.data === 'string') return result.data;
+
+            // Check for 'output' field (User reported structure)
+            if (result.data.output) {
+                return result.data.output;
+            }
+
+            if (result.data.choices && result.data.choices[0]?.message?.content) {
+                return result.data.choices[0].message.content;
+            }
+
+            // Fallback
+            return JSON.stringify(result.data);
+        }
+
+        return null;
+
+    } catch (error: any) {
+        console.error("Fal LLM SDK Failed:", error);
+        throw new Error(error.message || "Unknown Fal LLM SDK Error");
     }
 }
 
