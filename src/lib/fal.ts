@@ -1,13 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { constructEmotionalPrompt, NEGATIVE_PROMPT, CardType, ThemeKey } from "./prompt-engine";
 
-// Fallback if environment variable is missing (but it should be set!)
-// Fallback if environment variable is missing (but it should be set!)
-// TEMPORARY: Hardcoding key back to unblock testing
-const FAL_KEY = "df5731f7-b814-437e-a95b-7fb45c3f206a:ed38492af34d4ddb8cac35ce628eb1e8";
+const FAL_KEY = process.env.FAL_KEY;
 
 if (!FAL_KEY) {
-    console.warn("FAL_KEY is missing in environment variables! Please add it to .env.local");
+    throw new Error("FAL_KEY is missing in environment variables! Please add it to .env.local");
 }
 
 // Re-export types so api route can use them
@@ -28,7 +25,7 @@ export function constructPrompt(type: string, theme: string, inputs: { text?: st
     );
 }
 
-export async function generateFalImage(prompt: string, options?: { imageUrl?: string; aspectRatio?: string }) {
+export async function generateFalImage(prompt: string, options?: { imageUrls?: string[]; aspectRatio?: string }) {
     // Switching to fal-ai/nano-banana/edit as requested
     const url = "https://fal.run/fal-ai/nano-banana/edit";
 
@@ -39,9 +36,22 @@ export async function generateFalImage(prompt: string, options?: { imageUrl?: st
         let imageSize = "square_hd";
         if (options?.aspectRatio) {
             switch (options.aspectRatio) {
-                case "portrait": imageSize = "portrait_4_3"; break;
-                case "landscape": imageSize = "landscape_16_9"; break;
-                // default square
+                case "portrait":
+                case "4:5":
+                    imageSize = "portrait_4_3";
+                    break;
+                case "landscape":
+                case "16:9":
+                    imageSize = "landscape_16_9";
+                    break;
+                case "9:16":
+                    imageSize = "portrait_16_9";
+                    break;
+                case "square":
+                case "1:1":
+                default:
+                    imageSize = "square_hd";
+                    break;
             }
         }
 
@@ -51,11 +61,14 @@ export async function generateFalImage(prompt: string, options?: { imageUrl?: st
             // Nano Banana Edit expects 'image_urls' (plural, array)
         };
 
-        if (options?.imageUrl) {
-            body.image_urls = [options.imageUrl];
+        if (options?.imageUrls && options.imageUrls.length > 0) {
+            body.image_urls = options.imageUrls;
         }
 
         console.log("Fal Request Body:", JSON.stringify(body, null, 2));
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
 
         const response = await fetch(url, {
             method: "POST",
@@ -64,7 +77,9 @@ export async function generateFalImage(prompt: string, options?: { imageUrl?: st
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
+            signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
             const errorText = await response.text();

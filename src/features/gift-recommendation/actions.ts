@@ -15,10 +15,16 @@ export async function generateGiftAction(input: GiftInput) {
     const prompt = constructGiftPrompt(input);
 
     try {
-        const result = await generateContent({
+const result = await generateContent({
             featureType: 'gift-recommendation',
             userId: user.id,
-            userInput: { prompt }
+            userInput: {
+                featureType: 'gift-recommendation',
+                prompt,
+                recipient: input.recipient,
+                budget: input.budget,
+                interests: input.interests ? input.interests.split(',').map(i => i.trim()).filter(Boolean) : []
+            }
         });
 
         return { success: true, data: result };

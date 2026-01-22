@@ -15,10 +15,15 @@ export async function generateMenuAction(input: MenuInput) {
     const prompt = constructMenuPrompt(input);
 
     try {
-        const result = await generateContent({
+const result = await generateContent({
             featureType: 'ramadan-menu',
             userId: user.id,
-            userInput: { prompt }
+            userInput: {
+                featureType: 'ramadan-menu',
+                prompt,
+                preferences: [input.theme], // Use theme as preference
+                dietaryRestrictions: input.dietary ? [input.dietary] : []
+            }
         });
 
         return { success: true, data: result };

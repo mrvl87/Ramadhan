@@ -1,12 +1,12 @@
 import {
-    lemonsqueezySetup,
+    lemonSqueezySetup,
     createCheckout,
     NewCheckout,
 } from "@lemonsqueezy/lemonsqueezy.js";
 
 // Initialize
 if (process.env.LEMONSQUEEZY_API_KEY) {
-    lemonsqueezySetup({
+    lemonSqueezySetup({
         apiKey: process.env.LEMONSQUEEZY_API_KEY,
         onError: (error) => console.error("LemonSqueezy Error:", error),
     });

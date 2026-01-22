@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useRef } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createSupabaseBrowserClient } from "@/lib/supabase/factory"
 import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -19,7 +19,7 @@ export function ImageUploader({ onUploadComplete, currentImageUrl, className, fo
     const [error, setError] = useState<string | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const supabase = createClient()
+    const supabase = createSupabaseBrowserClient()
 
     // Handle Drag Events
     const handleDrag = useCallback((e: React.DragEvent) => {
@@ -33,7 +33,7 @@ export function ImageUploader({ onUploadComplete, currentImageUrl, className, fo
     }, [])
 
     // Validate and Upload
-    const handleFile = async (file: File) => {
+    const handleFile = useCallback(async (file: File) => {
         setError(null)
 
         // 1. Validation
@@ -82,12 +82,12 @@ export function ImageUploader({ onUploadComplete, currentImageUrl, className, fo
             console.error("Upload failed", err)
             setError(err.message || "Failed to upload image")
             setPreview(null) // Revert preview on failure
-        } finally {
+} finally {
             setUploading(false)
         }
-    }
+    }, [onUploadComplete, setError, setPreview, setDragActive, setUploading])
 
-    const handleDrop = useCallback((e: React.DragEvent) => {
+const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault()
         e.stopPropagation()
         setDragActive(false)
@@ -95,7 +95,7 @@ export function ImageUploader({ onUploadComplete, currentImageUrl, className, fo
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             handleFile(e.dataTransfer.files[0])
         }
-    }, [])
+    }, [handleFile])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()

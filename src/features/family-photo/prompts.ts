@@ -1,10 +1,11 @@
 export interface FamilyPhotoInput {
     style: 'anime' | 'realistic' | 'oil-painting' | '3d-cartoon';
     mode: 'individual' | 'family';
-    aspectRatio: 'square' | 'portrait' | 'landscape';
+    aspectRatio: 'square' | 'portrait' | 'landscape' | '1:1' | '9:16' | '16:9' | '4:5';
     caption?: string;
     familyType?: 'nuclear' | 'couple' | 'extended'; // Optional hint
     userGender?: 'male' | 'female'; // From detection
+    promptOverride?: string; // For new Wizard logic
 }
 
 export function constructFamilyPrompt(input: FamilyPhotoInput): string {

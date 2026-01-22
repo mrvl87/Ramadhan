@@ -1,8 +1,9 @@
 import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 
 export async function createClient() {
-    const cookieStore = await cookies()
+    try {
+        const { cookies } = await import('next/headers')
+        const cookieStore = await cookies()
 
     return createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,6 +25,24 @@ export async function createClient() {
                     }
                 },
             },
-        }
-    )
+}
+        )
+    } catch (error) {
+        // Fallback for when cookies() is not available (e.g., during build)
+        console.warn('Cookie store not available, using fallback client')
+        return createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            {
+                cookies: {
+                    getAll() {
+                        return []
+                    },
+                    setAll() {
+                        // No-op for fallback
+                    }
+                }
+            }
+        )
+    }
 }

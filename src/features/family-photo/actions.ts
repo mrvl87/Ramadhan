@@ -1,49 +1,42 @@
 'use server';
 
-import { generateContent } from '@/lib/ai/generate';
-import { createClient } from '@/lib/supabase/server';
-import { constructFamilyPrompt, FamilyPhotoInput } from './prompts';
+import { generateContent, FamilyPhotoInput } from '@/lib/ai/generate';
+import { createSupabaseServerClient } from '@/lib/supabase/factory';
+import { constructFamilyPrompt, FamilyPhotoInput as LocalFamilyPhotoInput } from './prompts';
 import { generateFalLLM } from '@/lib/fal';
+import { withActionErrorHandling, ApiErrorHandler } from '@/lib/error-handling';
 
 import { FAMILY_PHOTO_CONFIG } from './ai-config';
 
-export async function generateGreetingAction() {
-    try {
-        const themes = FAMILY_PHOTO_CONFIG.GREETING_THEMES;
-        const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+export const generateGreetingAction = withActionErrorHandling(async () => {
+    const themes = FAMILY_PHOTO_CONFIG.GREETING_THEMES;
+    const randomTheme = themes[Math.floor(Math.random() * themes.length)];
 
-        const prompt = FAMILY_PHOTO_CONFIG.GREETING_PROMPT_TEMPLATE(randomTheme);
+    const prompt = FAMILY_PHOTO_CONFIG.GREETING_PROMPT_TEMPLATE(randomTheme);
 
-        // Use model from config
-        const greeting = await generateFalLLM(prompt, FAMILY_PHOTO_CONFIG.GREETING_MODEL);
-        return { success: true, data: greeting?.replace(/["']/g, '').trim() };
-    } catch (error: any) {
-        console.error("Greeting Gen Error:", error);
-        return { success: false, error: error.message };
-    }
-}
+    // Use model from config
+    const greeting = await generateFalLLM(prompt, FAMILY_PHOTO_CONFIG.GREETING_MODEL);
+    return greeting?.replace(/["']/g, '').trim();
+});
 
-export async function generateFamilyPhotoAction(input: FamilyPhotoInput & { imageUrl: string }) {
-    const supabase = await createClient(); // Wait for promise
-    const { data: { user } } = await supabase.auth.getUser();
+export const generateFamilyPhotoAction = withActionErrorHandling(
+    async (input: LocalFamilyPhotoInput & { imageUrls: string[] }) => {
+        const supabase = await createSupabaseServerClient();
+        const user = await ApiErrorHandler.validateUser(supabase);
 
-    if (!user) {
-        throw new Error('Unauthorized');
-    }
+        // 1. Construct Prompt
+        const prompt = (input as any).promptOverride || constructFamilyPrompt(input);
+        console.log("Constructed Prompt:", prompt);
 
-    // 1. Construct Prompt
-    const prompt = constructFamilyPrompt(input);
-    console.log("Constructed Prompt:", prompt);
-
-    // 2. Call Unified Pipeline
-    try {
+        // 2. Call Unified Pipeline
         console.log("Calling generateContent pipeline...");
         const result = await generateContent({
             featureType: 'family-photo',
             userId: user.id,
             userInput: {
+                featureType: 'family-photo',
                 prompt,
-                imageUrl: input.imageUrl,
+                imageUrls: input.imageUrls,
                 aspectRatio: input.aspectRatio,
                 // caption is woven into prompt, so we don't strictly need to pass it separately as a param unless prompt engine changes
             }
@@ -57,16 +50,12 @@ export async function generateFamilyPhotoAction(input: FamilyPhotoInput & { imag
             throw new Error('No image URL returned from generation pipeline');
         }
 
-        return { success: true, data: imageUrl };
-
-    } catch (error: any) {
-        console.error("Server Action Error:", error);
-        return { success: false, error: error.message };
+return imageUrl;
     }
-}
+);
 
 export async function getUserStats() {
-    const supabase = await createClient();
+    const supabase = await createSupabaseServerClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) return null;

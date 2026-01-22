@@ -5,9 +5,41 @@ import { NextResponse } from 'next/server';
 
 export type FeatureType = 'family-photo' | 'ramadan-menu' | 'gift-recommendation';
 
+// Export these types for use in other files
+export type { FamilyPhotoInput, RamadanMenuInput, GiftRecommendationInput };
+
+// Base interface for all feature inputs
+interface BaseFeatureInput {
+    prompt: string;
+}
+
+// Specific interfaces for each feature type
+interface FamilyPhotoInput extends BaseFeatureInput {
+    imageUrls?: string[];
+    aspectRatio?: string;
+    style?: string;
+}
+
+interface RamadanMenuInput extends BaseFeatureInput {
+    preferences?: string[];
+    dietaryRestrictions?: string[];
+}
+
+interface GiftRecommendationInput extends BaseFeatureInput {
+    recipient?: string;
+    budget?: string;
+    interests?: string[];
+}
+
+// Union type for all feature inputs
+type FeatureInput = 
+    | (FamilyPhotoInput & { featureType: 'family-photo' })
+    | (RamadanMenuInput & { featureType: 'ramadan-menu' })
+    | (GiftRecommendationInput & { featureType: 'gift-recommendation' });
+
 interface GenerateOptions {
     featureType: FeatureType;
-    userInput: any;
+    userInput: FeatureInput;
     userId: string;
 }
 
@@ -29,14 +61,15 @@ export async function generateContent({ featureType, userInput, userId }: Genera
     try {
         let result;
 
-        switch (featureType) {
+switch (featureType) {
             case 'family-photo':
                 // Fal.ai Generation
                 console.log("Triggering Fal.ai generation (via generateFalImage wrapper)...");
                 try {
-                    const tempImageUrl = await generateFalImage(userInput.prompt, {
-                        imageUrl: userInput.imageUrl,
-                        aspectRatio: userInput.aspectRatio
+                    const photoInput = userInput as FamilyPhotoInput;
+                    const tempImageUrl = await generateFalImage(photoInput.prompt, {
+                        imageUrls: photoInput.imageUrls,
+                        aspectRatio: photoInput.aspectRatio
                     });
 
                     // 3. Persistent Save & Watermark Logic
@@ -56,6 +89,26 @@ export async function generateContent({ featureType, userInput, userId }: Genera
                     };
 
                     console.log("Generation completed. Final URL:", finalUrl);
+
+                    // 4. Save to History Table (NEW)
+                    const { error: historyError } = await supabase
+                        .from('generated_images')
+                        .insert({
+                            user_id: userId,
+                            image_url: finalUrl,
+                            prompt: userInput.prompt,
+                            feature_type: featureType,
+metadata: {
+                                aspectRatio: photoInput.aspectRatio,
+                                style: photoInput.style, // if available in userInput
+                                promptOverride: photoInput.prompt !== photoInput.prompt // rough check or just store full prompt
+                            }
+                        });
+
+                    if (historyError) {
+                        console.error("Failed to save history:", historyError);
+                        // Don't fail the whole request, but warn
+                    }
                 } catch (falError) {
                     console.error("Fal.ai generation error:", falError);
                     throw falError;
@@ -75,9 +128,27 @@ export async function generateContent({ featureType, userInput, userId }: Genera
 
         return result;
 
-    } catch (error) {
-        // Refund credit on failure? (Optional, advanced logic)
+} catch (error) {
+        // Refund credit on failure to avoid charging users for failed generations
         console.error("AI Generation Failed:", error);
+        
+        try {
+            const { error: refundError } = await supabase
+                .rpc('refund_credit', {
+                    target_user_id: userId,
+                    feature_name: featureType
+                });
+                
+            if (refundError) {
+                console.error("Failed to refund credit:", refundError);
+                // Log the refund failure but don't fail the request again
+            } else {
+                console.log("Credit refunded successfully for failed generation");
+            }
+        } catch (refundError) {
+            console.error("Error during credit refund:", refundError);
+        }
+        
         throw error;
     }
 }
