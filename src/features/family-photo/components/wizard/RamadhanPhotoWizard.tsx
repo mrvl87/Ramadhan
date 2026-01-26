@@ -75,7 +75,7 @@ export function RamadhanPhotoWizard({ imageUrls, onSuccess, isGenerating, setIsG
                 // Pass other metadata if needed
             });
 
-if (result.success && result.data) {
+            if (result.success && result.data) {
                 onSuccess(result.data);
                 toast.success("Foto berhasil dibuat! ✨");
             } else if (!result.success) {
@@ -103,16 +103,16 @@ if (result.success && result.data) {
     };
 
     return (
-        <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 overflow-hidden flex flex-col min-h-[500px]">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden flex flex-col min-h-[500px]">
             {/* Header / Progress */}
-            <div className="bg-slate-50 border-b border-slate-100 p-4">
+            <div className="bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700 p-4">
                 <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Langkah {state.currentStep} dari 5</span>
-                    <span className="text-xs text-slate-400">Wizard Mode</span>
+                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Langkah {state.currentStep} dari 5</span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500">Wizard Mode</span>
                 </div>
-                <div className="h-2 bg-slate-200 rounded-full w-full overflow-hidden">
+                <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full w-full overflow-hidden">
                     <div
-                        className="h-full bg-emerald-500 transition-all duration-500 ease-out"
+                        className="h-full bg-emerald-500 dark:bg-emerald-600 transition-all duration-500 ease-out"
                         style={{ width: `${(state.currentStep / 5) * 100}%` }}
                     />
                 </div>
@@ -125,30 +125,30 @@ if (result.success && result.data) {
 
             {/* Footer Navigation (Exceptions for Step 5 which has its own big button) */}
             {state.currentStep < 5 && (
-                <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-between">
+                <div className="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 flex justify-between">
                     <Button
                         variant="ghost"
                         onClick={prevStep}
                         disabled={state.currentStep === 1}
-                        className="text-slate-500 hover:text-slate-700"
+                        className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                     >
                         <ChevronLeft className="w-4 h-4 mr-1" /> Kembali
                     </Button>
                     <Button
                         onClick={nextStep}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                        className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white"
                     >
                         Lanjut <ChevronRight className="w-4 h-4 ml-1" />
                     </Button>
                 </div>
             )}
             {state.currentStep === 5 && (
-                <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-start">
+                <div className="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 flex justify-start">
                     <Button
                         variant="ghost"
                         onClick={prevStep}
                         disabled={loading}
-                        className="text-slate-500 hover:text-slate-700"
+                        className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                     >
                         <ChevronLeft className="w-4 h-4 mr-1" /> Kembali
                     </Button>

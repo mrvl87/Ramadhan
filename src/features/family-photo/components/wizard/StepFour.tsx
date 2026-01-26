@@ -22,8 +22,8 @@ export function StepFour({ config, updateConfig }: StepFourProps) {
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="text-center">
-                <h3 className="text-xl font-bold text-emerald-950">Lokasi & Dekorasi</h3>
-                <p className="text-sm text-emerald-600">Di mana foto ini diambil?</p>
+                <h3 className="text-xl font-bold text-emerald-950 dark:text-emerald-100">Lokasi & Dekorasi</h3>
+                <p className="text-sm text-emerald-600 dark:text-emerald-400">Di mana foto ini diambil?</p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -34,21 +34,21 @@ export function StepFour({ config, updateConfig }: StepFourProps) {
                         className={cn(
                             "flex flex-col items-center p-4 border-2 rounded-xl transition-all hover:shadow-md text-center space-y-2",
                             config.background === item.id
-                                ? "border-emerald-600 bg-emerald-50 ring-2 ring-emerald-200"
-                                : "border-slate-200 bg-white hover:border-emerald-200"
+                                ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-900/50 ring-2 ring-emerald-200 dark:ring-emerald-700"
+                                : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-emerald-200 dark:hover:border-emerald-700"
                         )}
                     >
-                        <item.icon className={cn("w-8 h-8", config.background === item.id ? "text-emerald-700" : "text-slate-400")} />
-                        <div className="text-sm font-semibold">{item.label}</div>
+                        <item.icon className={cn("w-8 h-8", config.background === item.id ? "text-emerald-700 dark:text-emerald-400" : "text-slate-400 dark:text-slate-500")} />
+                        <div className="text-sm font-semibold text-slate-700 dark:text-slate-200">{item.label}</div>
                     </button>
                 ))}
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mt-4 space-y-3">
-                <h4 className="text-sm font-medium text-slate-700">Dekorasi Tambahan</h4>
+            <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 mt-4 space-y-3">
+                <h4 className="text-sm font-medium text-slate-700 dark:text-slate-200">Dekorasi Tambahan</h4>
 
-                <label className="flex items-center justify-between p-2 hover:bg-white rounded cursor-pointer transition-colors">
-                    <span className="text-sm text-slate-700 flex items-center gap-2">
+                <label className="flex items-center justify-between p-2 hover:bg-white dark:hover:bg-slate-700 rounded cursor-pointer transition-colors">
+                    <span className="text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
                         🔷 Gantung Ketupat
                     </span>
                     <input
@@ -59,8 +59,8 @@ export function StepFour({ config, updateConfig }: StepFourProps) {
                     />
                 </label>
 
-                <label className="flex items-center justify-between p-2 hover:bg-white rounded cursor-pointer transition-colors">
-                    <span className="text-sm text-slate-700 flex items-center gap-2">
+                <label className="flex items-center justify-between p-2 hover:bg-white dark:hover:bg-slate-700 rounded cursor-pointer transition-colors">
+                    <span className="text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
                         <LampCeiling className="w-4 h-4" /> Lampu Hias Maroko
                     </span>
                     <input
