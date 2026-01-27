@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Moon, Sun, Menu, X, User, LogOut, Coins } from 'lucide-react'
+import { Moon, Sun, Menu, X, User, LogOut, Coins, LayoutDashboard, Shield } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,6 +21,7 @@ export function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [user, setUser] = useState<any>(null)
     const [credits, setCredits] = useState<number>(0)
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const { theme, setTheme } = useTheme()
     const router = useRouter()
 
@@ -45,6 +46,24 @@ export function Navbar() {
 
             if (userData) {
                 setCredits(userData.credits || 0)
+            }
+
+            // Check if user is admin
+            console.log('[NAVBAR] Checking admin status for user:', authUser.id)
+            const { data: adminData, error: adminError } = await supabase
+                .from('admins')
+                .select('role')
+                .eq('user_id', authUser.id)
+                .is('revoked_at', null)
+                .single()
+
+            console.log('[NAVBAR] Admin check result:', { adminData, adminError })
+
+            if (adminData) {
+                console.log('[NAVBAR] ✅ Setting isAdmin to TRUE')
+                setIsAdmin(true)
+            } else {
+                console.log('[NAVBAR] ❌ Not admin or query failed')
             }
         }
     }
@@ -143,6 +162,18 @@ export function Navbar() {
                                         </div>
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
+                                    {isAdmin && (
+                                        <>
+                                            <DropdownMenuItem asChild>
+                                                <Link href="/admin/dashboard" className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950">
+                                                    <LayoutDashboard className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                                                    <span className="flex-1">Admin Dashboard</span>
+                                                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-purple-600 dark:bg-purple-500 text-white font-semibold">ADMIN</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                        </>
+                                    )}
                                     <DropdownMenuItem asChild>
                                         <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
                                             <User className="w-4 h-4" />

@@ -22,7 +22,7 @@ export default function Home() {
     }
   }, []);
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Hero Section */}
       <section className="bg-[url('/assets/hero-bg.jpg')] bg-cover bg-center relative h-[500px] flex items-center justify-center text-center px-4">
         <div className="absolute inset-0 bg-black/50" />
@@ -39,21 +39,21 @@ export default function Home() {
 
       {/* Features Grid */}
       <section className="max-w-6xl mx-auto px-4 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Our Features</h2>
+        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Our Features</h2>
         <div className="grid md:grid-cols-3 gap-8">
 
           {/* Family Photo */}
-          <Card className="hover:shadow-xl transition-all border-emerald-100 overflow-hidden group">
-            <div className="h-48 bg-emerald-50 relative flex items-center justify-center">
-              <Camera className="w-16 h-16 text-emerald-600 group-hover:scale-110 transition-transform" />
+          <Card className="hover:shadow-xl transition-all border-emerald-100 dark:border-emerald-900 dark:bg-slate-900 overflow-hidden group">
+            <div className="h-48 bg-emerald-50 dark:bg-emerald-950 relative flex items-center justify-center">
+              <Camera className="w-16 h-16 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
             </div>
             <CardHeader>
-              <CardTitle className=" text-emerald-700">AI Family Photo</CardTitle>
-              <CardDescription>Turn selfies into beautiful Eid family portraits.</CardDescription>
+              <CardTitle className="text-emerald-700 dark:text-emerald-400">AI Family Photo</CardTitle>
+              <CardDescription className="dark:text-slate-400">Turn selfies into beautiful Eid family portraits.</CardDescription>
             </CardHeader>
             <CardFooter>
               <Link href="/kartu/family" className="w-full">
-                <Button variant="outline" className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <Button variant="outline" className="w-full border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                   Create Photo <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
@@ -61,17 +61,17 @@ export default function Home() {
           </Card>
 
           {/* Menu Generator */}
-          <Card className="hover:shadow-xl transition-all border-orange-100 overflow-hidden group">
-            <div className="h-48 bg-orange-50 relative flex items-center justify-center">
-              <ChefHat className="w-16 h-16 text-orange-600 group-hover:scale-110 transition-transform" />
+          <Card className="hover:shadow-xl transition-all border-orange-100 dark:border-orange-900 dark:bg-slate-900 overflow-hidden group">
+            <div className="h-48 bg-orange-50 dark:bg-orange-950 relative flex items-center justify-center">
+              <ChefHat className="w-16 h-16 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-transform" />
             </div>
             <CardHeader>
-              <CardTitle className="text-orange-700">Review Menu</CardTitle>
-              <CardDescription>Get a personalized Iftar & Sahur meal plan.</CardDescription>
+              <CardTitle className="text-orange-700 dark:text-orange-400">Review Menu</CardTitle>
+              <CardDescription className="dark:text-slate-400">Get a personalized Iftar & Sahur meal plan.</CardDescription>
             </CardHeader>
             <CardFooter>
               <Link href="/menu" className="w-full">
-                <Button variant="outline" className="w-full border-orange-200 text-orange-700 hover:bg-orange-50 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                <Button variant="outline" className="w-full border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950 group-hover:bg-orange-600 group-hover:text-white transition-colors">
                   Plan Menu <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
@@ -79,17 +79,17 @@ export default function Home() {
           </Card>
 
           {/* Gift Recommendation */}
-          <Card className="hover:shadow-xl transition-all border-purple-100 overflow-hidden group">
-            <div className="h-48 bg-purple-50 relative flex items-center justify-center">
-              <Gift className="w-16 h-16 text-purple-600 group-hover:scale-110 transition-transform" />
+          <Card className="hover:shadow-xl transition-all border-purple-100 dark:border-purple-900 dark:bg-slate-900 overflow-hidden group">
+            <div className="h-48 bg-purple-50 dark:bg-purple-950 relative flex items-center justify-center">
+              <Gift className="w-16 h-16 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform" />
             </div>
             <CardHeader>
-              <CardTitle className="text-purple-700">Gift Ideas</CardTitle>
-              <CardDescription>Find thoughtful gifts for your loved ones.</CardDescription>
+              <CardTitle className="text-purple-700 dark:text-purple-400">Gift Ideas</CardTitle>
+              <CardDescription className="dark:text-slate-400">Find thoughtful gifts for your loved ones.</CardDescription>
             </CardHeader>
             <CardFooter>
               <Link href="/gift" className="w-full">
-                <Button variant="outline" className="w-full border-purple-200 text-purple-700 hover:bg-purple-50 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                <Button variant="outline" className="w-full border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 group-hover:bg-purple-600 group-hover:text-white transition-colors">
                   Find Gifts <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
