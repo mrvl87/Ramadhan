@@ -15,84 +15,74 @@ export async function POST(req: Request) {
 
         // Handle "Invoice Paid" event
         if (body.status === "PAID" || body.status === "SETTLED") {
-            const externalId = body.external_id; // "INV-{user_id}-{timestamp}"
+            const externalId = body.external_id; // "CREDITS-{BUNDLE}-{user_id}-{timestamp}"
             const parts = externalId.split("-");
-            // Basic extraction: INV, UserID, Timestamp
-            // If UserID has dashes, we need to be careful.
-            // Better strategy: We stored user_id in the externalId. 
-            // Let's assume user_id is the 2nd part, or we rejoin if UUID?
-            // UUIDs have dashes. "INV-uuid-timestamp".
-            // Let's rely on finding the user via email if possible, or parsing carefully.
 
-            // Re-parsing strategy:
-            // Remove "INV-" prefix and the last "-timestamp" suffix.
-            // This is brittle.
+            // Parse bundle type from externalId
+            // Format: CREDITS-STARTER-uuid-timestamp or CREDITS-POPULAR-uuid-timestamp
+            const bundleType = parts[1]?.toLowerCase(); // "starter", "popular", or "power"
 
-            // BETTER: Use payer_email to find user.
-            const payerEmail = body.payer_email;
+            // Map bundle to credits
+            const BUNDLE_CREDITS: Record<string, number> = {
+                starter: 50,
+                popular: 150,
+                power: 500
+            };
 
-            if (payerEmail) {
-                const supabase = await createClient();
+            const creditsToAdd = BUNDLE_CREDITS[bundleType] || 0;
 
-                // We need to use SERVICE ROLE to update users table directly?
-                // Or just use the standard client if we have a way to query by email?
-                // The standard client uses the request cookies, which don't exist here.
-                // We need a Service Role Client for Webhooks.
-                // Since we don't have one readily set up in lib/supabase, we might face permission issues.
-                // BUT: We enabled RLS. We can't update public.users without being logged in or being admin.
-
-                // For MVP, we'll assume we have a function or we create a service client using the key.
-                // Let's try to init a service client here manually.
-                const { createClient: createSupabaseClient } = require('@supabase/supabase-js');
-                const supabaseAdmin = createSupabaseClient(
-                    process.env.NEXT_PUBLIC_SUPABASE_URL,
-                    process.env.SUPABASE_SERVICE_ROLE_KEY
-                );
-
-                const { data: userData, error: userError } = await supabaseAdmin
-                    .from('auth.users') // Trying to find ID from email? No, we can query public.users if email is there?
-                    // public.users matches auth.users.
-                    // Actually, public.users might not have email. auth.users does.
-                    // Let's assume we can query `public.users` by joining or we stored `email` in `public.users`? 
-                    // We added email to public.users? Let's check schema.
-                    // We added `payment_customer_id`.
-
-                    // Actually, finding via email in public.users is risky if not synced.
-                    // Let's go with the ID in external_id if possible.
-
-                    // "INV-123e4567-e89b-12d3-a456-426614174000-1678888888"
-                    // "INV-" is 4 chars.
-                    // Timestamp is roughly 13 chars? 
-                    // Let's try the email matching strategy on `auth.users`, getting the ID, then updating `public.users`.
-                    // But we can't select from auth.users easily unless service role.
-
-                    // Using Service Role:
-                    .rpc('get_user_id_by_email', { email: payerEmail });
-                // Wait, we don't have that RPC.
-
-                // Fallback: We can just update public.users where id = ... if we parse carefully.
-                // Let's try parsing.
-                // ID is parts.slice(1, -1).join("-")
-                const userIdCandidate = parts.slice(1, -1).join("-");
-
-                // Update
-                const { error } = await supabaseAdmin
-                    .from('public.users')
-                    .update({
-                        plan: 'pro',
-                        pro_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                        payment_gateway: 'xendit',
-                        payment_status: 'paid'
-                    })
-                    .eq('id', userIdCandidate);
-
-                if (error) {
-                    console.error("Failed to activate Pro:", error);
-                    return NextResponse.json({ error: "Update Failed" }, { status: 500 });
-                }
-
-                console.log(`[Xendit] Activated Pro for user ${userIdCandidate}`);
+            if (creditsToAdd === 0) {
+                console.error(`[Xendit] Unknown bundle type: ${bundleType}`);
+                return NextResponse.json({ error: "Unknown bundle type" }, { status: 400 });
             }
+
+            // Extract user ID (parts between bundle and timestamp)
+            // For UUID: CREDITS-BUNDLE-xxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx-timestamp
+            // User ID is parts[2] through parts[length-2] joined with "-"
+            const userIdCandidate = parts.slice(2, -1).join("-");
+
+            if (!userIdCandidate) {
+                console.error("[Xendit] Could not extract user ID from external_id");
+                return NextResponse.json({ error: "Invalid external_id" }, { status: 400 });
+            }
+
+            const { createClient: createSupabaseClient } = require('@supabase/supabase-js');
+            const supabaseAdmin = createSupabaseClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL,
+                process.env.SUPABASE_SERVICE_ROLE_KEY
+            );
+
+            // Get current credits
+            const { data: currentUser, error: fetchError } = await supabaseAdmin
+                .from('users')
+                .select('credits')
+                .eq('id', userIdCandidate)
+                .single();
+
+            if (fetchError) {
+                console.error("[Xendit] Failed to fetch user:", fetchError);
+                return NextResponse.json({ error: "User not found" }, { status: 404 });
+            }
+
+            const currentCredits = currentUser?.credits || 0;
+            const newCredits = currentCredits + creditsToAdd;
+
+            // Update user credits (additive model - credits stack)
+            const { error } = await supabaseAdmin
+                .from('users')
+                .update({
+                    credits: newCredits,
+                    payment_gateway: 'xendit',
+                    payment_status: 'paid'
+                })
+                .eq('id', userIdCandidate);
+
+            if (error) {
+                console.error("[Xendit] Failed to update credits:", error);
+                return NextResponse.json({ error: "Update Failed" }, { status: 500 });
+            }
+
+            console.log(`[Xendit] Added ${creditsToAdd} credits to user ${userIdCandidate}. Previous: ${currentCredits}, New: ${newCredits}`);
         }
 
         return NextResponse.json({ status: "OK" });

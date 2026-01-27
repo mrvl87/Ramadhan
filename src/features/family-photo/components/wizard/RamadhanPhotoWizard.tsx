@@ -17,9 +17,10 @@ interface RamadhanPhotoWizardProps {
     onSuccess: (url: string) => void;
     isGenerating?: boolean; // Prop to allow parent to know/control, but we mostly manage here?
     setIsGenerating?: (val: boolean) => void;
+    onCreditError?: () => void; // Handler for credit exhaustion
 }
 
-export function RamadhanPhotoWizard({ imageUrls, onSuccess, isGenerating, setIsGenerating }: RamadhanPhotoWizardProps) {
+export function RamadhanPhotoWizard({ imageUrls, onSuccess, isGenerating, setIsGenerating, onCreditError }: RamadhanPhotoWizardProps) {
     const [state, setState] = useState<WizardState>(INITIAL_WIZARD_STATE);
 
     // Local loading state if not provided by parent
@@ -75,17 +76,41 @@ export function RamadhanPhotoWizard({ imageUrls, onSuccess, isGenerating, setIsG
                 // Pass other metadata if needed
             });
 
+
             if (result.success && result.data) {
                 onSuccess(result.data);
                 toast.success("Foto berhasil dibuat! ✨");
             } else if (!result.success) {
-                toast.error("Gagal membuat foto: " + result.error);
+                // Check if error is related to insufficient credits
+                const errorMsg = result.error || "";
+                if (errorMsg.toLowerCase().includes("insufficient credits") ||
+                    errorMsg.toLowerCase().includes("error checking balance")) {
+                    // Trigger paywall modal
+                    if (onCreditError) {
+                        onCreditError();
+                    } else {
+                        toast.error("Kredit habis. Silakan upgrade untuk melanjutkan.");
+                    }
+                } else {
+                    toast.error("Gagal membuat foto: " + result.error);
+                }
             } else {
                 toast.error("Gagal membuat foto: Unknown error");
             }
 
         } catch (e: any) {
-            toast.error("Terjadi kesalahan: " + e.message);
+            // Also check exception message for credit errors
+            const errorMsg = e.message || "";
+            if (errorMsg.toLowerCase().includes("insufficient credits") ||
+                errorMsg.toLowerCase().includes("error checking balance")) {
+                if (onCreditError) {
+                    onCreditError();
+                } else {
+                    toast.error("Kredit habis. Silakan upgrade untuk melanjutkan.");
+                }
+            } else {
+                toast.error("Terjadi kesalahan: " + e.message);
+            }
         } finally {
             setLoading(false);
         }

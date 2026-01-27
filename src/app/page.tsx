@@ -1,10 +1,26 @@
+'use client';
+
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Camera, ChefHat, Gift, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function Home() {
+  useEffect(() => {
+    // Check for payment success using URLSearchParams (client-side only)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('payment') === 'success') {
+      toast.success('🎉 Payment successful! Your Pro subscription is now active.', {
+        duration: 5000,
+      });
+
+      // Clean URL without reload
+      window.history.replaceState({}, '', '/');
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}

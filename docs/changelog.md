@@ -3,6 +3,40 @@
 ## [Unreleased]
 
 ### Added
+- **v0.6.0 (Jan 27, 2026) - Credit-Based Pricing System** 🎯 **CHECKPOINT: PRICING_V1**
+    - **Feature**: New `/pricing` route with professional pricing page
+        - **Pricing Model**: Shifted from subscription to credit-based bundles for seasonal usage
+        - **Three Tiers**:
+            - 🌙 **Starter Pack**: 50 credits @ Rp 49,000 (Rp 980/credit)
+            - ⭐ **Popular Pack** (BEST VALUE): 150 credits @ Rp 129,000 (Rp 860/credit, Save 12%)
+            - 💎 **Power Pack**: 500 credits @ Rp 399,000 (Rp 798/credit, Save 19%)
+        - **Free Tier**: Increased from 3 to 5 free credits for new users
+        - **No Expiry**: Credits never expire, users can use them across multiple Ramadan seasons
+    - **Payment Integration Updates**:
+        - Modified `/api/payment/create-checkout/route.ts` to accept `bundle` parameter
+        - Dynamic pricing based on selected bundle (starter/popular/power)
+        - Updated `external_id` format: `CREDITS-{BUNDLE}-{userId}-{timestamp}`
+    - **Webhook Handler Updates**:
+        - Modified `/api/webhooks/xendit/route.ts` to parse bundle type from external_id
+        - Implements credit addition instead of subscription activation
+        - Stacks credits on top of existing balance (additive model)
+    - **Components**:
+        - New `CreditBundleCard.tsx` component for individual pricing tiers
+        - Updated `PaywallModal.tsx` to support bundle selection
+    - **Marketing Strategy**:
+        - Aggressive pricing positioning (10x markup vs 104x in initial proposal)
+        - Encourages experimentation and viral sharing
+        - Competitive with international services (Midjourney, Leonardo.ai)
+        - 88% net margin at 1,000 users/month
+    - **Design Decisions**:
+        - Cost structure analysis: fal.ai FLUX.1-schnell ~Rp 80/generation
+        - Target markup: 10x (industry standard for SaaS tools)
+        - Entry barrier lowered from Rp 99k to Rp 49k (50% reduction)
+        - Credits per tier increased 400-500% compared to initial proposal
+    - **Documentation**: 
+        - Added `docs/features/006_pricing_page.md` for detailed specification
+        - Updated `implementation_plan.md` with cost analysis and revenue projections
+
 - **v0.5.0 (Jan 19) - AI Family Photo & Greeting Engine Update**
     - **Feature**: Advanced AI Family Photo (`/kartu/family`).
         - **AI Engine**: Integrated `fal.subscribe` SDK for robust generation.
@@ -21,6 +55,8 @@
 - **Product Refocus**: Shifted main branch strategy back to consumer roots (Family, Menu, Gift).
 - **Architecture**: Refactored into modular `src/features/` directory structure.
 - **Removed Features**: Moved Political/Election features to `refactor/political-ui-v2` branch.
+- **Pricing Strategy**: Eliminated subscription model in favor of credit bundles (better for seasonal apps)
+- **Button Visibility Fix**: Changed "Start Creating" button text color from `text-primary-foreground` to `text-accent-foreground` for better contrast
 
 ### Added
 - **Unified AI Pipeline**: `src/lib/ai/generate.ts` centralizes all AI calls and credit consumption.
@@ -77,3 +113,15 @@
 - **RLS Policies**: Implemented Row Level Security to protect user data.
 - **Env Var Crash**: Added fallback handling (temporarily) and then fixed the root cause by applying correct credentials to `.env.local`.
 - **Import Errors**: Resolved missing module errors for UI components.
+- **CSS Parsing Error**: Resolved "Parsing CSS source code failed" error caused by invalid Tailwind class (`.[-:|]`) by cleaning up page.tsx
+
+---
+
+## Checkpoints Reference
+
+Use these checkpoint markers to easily navigate feature discussions:
+
+- **CHECKPOINT: PRICING_V1** (Jan 27, 2026) - Credit-based pricing system implementation
+  - Location: This changelog, `docs/features/006_pricing_page.md`
+  - Related files: `/pricing/page.tsx`, payment API, webhook handler
+  - Discussion points: Pricing strategy, bundle configuration, credit mechanics

@@ -9,11 +9,21 @@ import { GenerationOverlay } from '@/components/family-photo/GenerationOverlay';
 import { RamadhanPhotoWizard } from './components/wizard/RamadhanPhotoWizard';
 import { Download, Sparkles } from 'lucide-react';
 import { AIGenerationErrorBoundary, ImageUploadErrorBoundary } from '@/components/ui/error-boundary';
+import { useGenerationProgress } from '@/hooks/useGenerationProgress';
+import confetti from 'canvas-confetti';
+import { PaywallModal } from '@/components/paywall/PaywallModal';
 
 export default function FamilyPhotoPage() {
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [resultUrl, setResultUrl] = useState<string | null>(null);
+
+    // Progress tracking for better UX
+    const { progress, eta } = useGenerationProgress(isGenerating, 20);
+
+    // Paywall modal state
+    const [showPaywall, setShowPaywall] = useState(false);
+    const [paywallReason, setPaywallReason] = useState<"NO_CREDITS" | "NOT_LOGGED_IN">("NO_CREDITS");
 
     useEffect(() => {
         // Log user status on mount
@@ -22,6 +32,20 @@ export default function FamilyPhotoPage() {
 
     const handleSuccess = (url: string) => {
         setResultUrl(url);
+
+        // Celebrate with confetti! 🎉
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#10b981', '#34d399', '#fbbf24', '#f59e0b'], // emerald + gold theme
+        });
+    };
+
+    // Handler for credit exhaustion
+    const handleCreditError = () => {
+        setPaywallReason("NO_CREDITS");
+        setShowPaywall(true);
     };
 
     return (
@@ -73,6 +97,7 @@ export default function FamilyPhotoPage() {
                                     onSuccess={handleSuccess}
                                     isGenerating={isGenerating}
                                     setIsGenerating={setIsGenerating}
+                                    onCreditError={handleCreditError}
                                 />
                             </div>
                         ) : (
@@ -119,16 +144,38 @@ export default function FamilyPhotoPage() {
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent animate-shimmer"></div>
 
                                         {/* Loading Content */}
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                                            <div className="w-24 h-24 bg-emerald-500/20 dark:bg-emerald-500/30 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-6">
+                                            <div className="w-24 h-24 bg-emerald-500/20 dark:bg-emerald-500/30 rounded-full flex items-center justify-center mb-2 animate-pulse">
                                                 <Sparkles className="w-12 h-12 text-emerald-600 dark:text-emerald-400 animate-pulse-slow" />
                                             </div>
-                                            <h3 className="font-bold text-xl text-slate-700 dark:text-slate-200 mb-2">
-                                                Generating Your Family Photo...
-                                            </h3>
-                                            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs">
-                                                AI sedang bekerja untuk menciptakan foto keluarga yang sempurna. Harap tunggu sebentar.
-                                            </p>
+
+                                            <div className="w-full max-w-xs space-y-3">
+                                                <h3 className="font-bold text-xl text-slate-700 dark:text-slate-200">
+                                                    Generating Your Family Photo...
+                                                </h3>
+
+                                                {/* Progress Bar */}
+                                                <div className="w-full bg-slate-300 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                                                    <div
+                                                        className="bg-emerald-500 dark:bg-emerald-600 h-2 rounded-full transition-all duration-300 ease-out"
+                                                        style={{ width: `${progress}%` }}
+                                                    />
+                                                </div>
+
+                                                {/* ETA Display */}
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="text-slate-500 dark:text-slate-400">
+                                                        {Math.round(progress)}% complete
+                                                    </span>
+                                                    <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+                                                        {eta > 0 ? `~${eta}s remaining` : 'Almost done...'}
+                                                    </span>
+                                                </div>
+
+                                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                                                    AI sedang bekerja untuk menciptakan foto keluarga yang sempurna.
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 ) : (
@@ -147,6 +194,13 @@ export default function FamilyPhotoPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Paywall Modal */}
+            <PaywallModal
+                isOpen={showPaywall}
+                onClose={() => setShowPaywall(false)}
+                reason={paywallReason}
+            />
         </AIGenerationErrorBoundary>
     );
 }
