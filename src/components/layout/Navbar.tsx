@@ -71,8 +71,9 @@ export function Navbar() {
     const handleLogout = async () => {
         const supabase = createClient()
         await supabase.auth.signOut()
-        router.push('/login')
-        router.refresh()
+
+        // Force full page reload to clear all state (including admin status)
+        window.location.href = '/login'
     }
 
     const navLinks = [
