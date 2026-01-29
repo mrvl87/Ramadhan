@@ -1,86 +1,143 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { X, Plus } from 'lucide-react'
-import { SUGGESTED_INTERESTS } from '../../utils/constants'
+import { Button } from '@/components/ui/button'
+import { X, Plus, History, Trash2 } from 'lucide-react'
 
 interface StepThreeProps {
     interests: string[]
     onChange: (interests: string[]) => void
 }
 
-export function StepThree({ interests, onChange }: StepThreeProps) {
-    const [input, setInput] = useState('')
+const POPULAR_INTERESTS = [
+    'Reading', 'Cooking', 'Gardening', 'Photography', 'Art', 'Music',
+    'Sports', 'Travel', 'Technology', 'Fashion', 'Gaming', 'Fitness'
+]
 
-    const addInterest = (interest: string) => {
+const HISTORY_STORAGE_KEY = 'gift-ideas-interest-history'
+const MAX_HISTORY_ITEMS = 10
+
+export function StepThree({ interests, onChange }: StepThreeProps) {
+    const [customInterest, setCustomInterest] = useState('')
+    const [interestHistory, setInterestHistory] = useState<string[]>([])
+
+    // Load interest history from localStorage on mount
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem(HISTORY_STORAGE_KEY)
+            if (saved) {
+                const parsed = JSON.parse(saved)
+                setInterestHistory(parsed)
+            }
+        } catch (error) {
+            console.error('[INTEREST HISTORY] Failed to load:', error)
+        }
+    }, [])
+
+    // Save interest to history
+    const saveToHistory = (interest: string) => {
         const trimmed = interest.trim()
+        if (!trimmed) return
+
+        setInterestHistory((prev) => {
+            // Remove if already exists (move to front)
+            const filtered = prev.filter((item) => item.toLowerCase() !== trimmed.toLowerCase())
+            // Add to front
+            const updated = [trimmed, ...filtered].slice(0, MAX_HISTORY_ITEMS)
+
+            // Save to localStorage
+            try {
+                localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated))
+            } catch (error) {
+                console.error('[INTEREST HISTORY] Failed to save:', error)
+            }
+
+            return updated
+        })
+    }
+
+    // Clear all history
+    const clearHistory = () => {
+        setInterestHistory([])
+        try {
+            localStorage.removeItem(HISTORY_STORAGE_KEY)
+        } catch (error) {
+            console.error('[INTEREST HISTORY] Failed to clear:', error)
+        }
+    }
+
+    const handleAddCustom = () => {
+        const trimmed = customInterest.trim()
         if (trimmed && !interests.includes(trimmed)) {
             onChange([...interests, trimmed])
+            saveToHistory(trimmed)
+            setCustomInterest('')
         }
-        setInput('')
+    }
+
+    const toggleInterest = (interest: string) => {
+        if (interests.includes(interest)) {
+            onChange(interests.filter((i) => i !== interest))
+        } else {
+            onChange([...interests, interest])
+            saveToHistory(interest)
+        }
     }
 
     const removeInterest = (interest: string) => {
-        onChange(interests.filter(i => i !== interest))
-    }
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && input.trim()) {
-            e.preventDefault()
-            addInterest(input)
-        }
+        onChange(interests.filter((i) => i !== interest))
     }
 
     return (
         <div className="space-y-6">
-            <div className="text-center">
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                    Tell us about them
+            {/* Header */}
+            <div className="text-center space-y-2">
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+                    Apa minat atau hobi mereka?
                 </h2>
                 <p className="text-slate-600 dark:text-slate-400">
-                    What are their interests or hobbies?
+                    Pilih atau tambahkan hobi untuk rekomendasi yang lebih personal (opsional)
                 </p>
             </div>
 
-            {/* Input Field */}
-            <div className="relative">
+            {/* Custom Interest Input */}
+            <div className="flex gap-2">
                 <Input
-                    placeholder="Type an interest and press Enter..."
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="pr-10 text-base"
+                    value={customInterest}
+                    onChange={(e) => setCustomInterest(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom()}
+                    placeholder="Contoh: Membaca Al-Quran, Memasak kue, dll..."
+                    className="flex-1"
                 />
-                {input && (
-                    <button
-                        onClick={() => addInterest(input)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-purple-100 dark:hover:bg-purple-900 rounded-full transition-colors"
-                        title="Add interest"
-                    >
-                        <Plus className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                    </button>
-                )}
+                <Button
+                    onClick={handleAddCustom}
+                    disabled={!customInterest.trim()}
+                    className="bg-purple-600 hover:bg-purple-700"
+                >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Tambah
+                </Button>
             </div>
 
             {/* Selected Interests */}
             {interests.length > 0 && (
-                <div>
-                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
-                        Selected ({interests.length}):
+                <div className="space-y-2">
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Minat yang dipilih ({interests.length})
                     </p>
                     <div className="flex flex-wrap gap-2">
                         {interests.map((interest) => (
                             <Badge
                                 key={interest}
                                 variant="secondary"
-                                className="px-3 py-1.5 bg-purple-100 dark:bg-purple-900 text-purple-900 dark:text-purple-100 border-purple-200 dark:border-purple-800"
+                                className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 px-3 py-1.5 text-sm"
                             >
                                 {interest}
                                 <button
                                     onClick={() => removeInterest(interest)}
-                                    className="ml-2 hover:text-purple-700 dark:hover:text-purple-300"
+                                    className="ml-2 hover:text-purple-600 dark:hover:text-purple-400"
                                 >
                                     <X className="w-3 h-3" />
                                 </button>
@@ -90,32 +147,76 @@ export function StepThree({ interests, onChange }: StepThreeProps) {
                 </div>
             )}
 
-            {/* Suggested Tags */}
-            <div>
-                <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
-                    {interests.length === 0 ? 'Popular suggestions:' : 'Add more:'}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                    {SUGGESTED_INTERESTS
-                        .filter(interest => !interests.includes(interest))
-                        .map((interest) => (
+            {/* Interest History */}
+            {interestHistory.length > 0 && (
+                <div className="space-y-2 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <History className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Riwayat Pencarian Anda
+                            </p>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={clearHistory}
+                            className="text-xs text-slate-500 hover:text-red-600"
+                        >
+                            <Trash2 className="w-3 h-3 mr-1" />
+                            Hapus Semua
+                        </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {interestHistory.map((interest) => (
                             <Badge
                                 key={interest}
                                 variant="outline"
-                                className="cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-950 hover:border-purple-300 dark:hover:border-purple-700 transition-colors px-3 py-1.5"
-                                onClick={() => addInterest(interest)}
+                                className={`
+                                    cursor-pointer transition-all
+                                    ${interests.includes(interest)
+                                        ? 'bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900 dark:border-purple-700 dark:text-purple-200'
+                                        : 'hover:bg-slate-100 dark:hover:bg-slate-700'
+                                    }
+                                `}
+                                onClick={() => toggleInterest(interest)}
                             >
-                                <Plus className="w-3 h-3 mr-1" />
                                 {interest}
                             </Badge>
                         ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Popular Suggestions */}
+            <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    Saran Populer
+                </p>
+                <div className="flex flex-wrap gap-2">
+                    {POPULAR_INTERESTS.map((interest) => (
+                        <Badge
+                            key={interest}
+                            variant="outline"
+                            className={`
+                                cursor-pointer transition-all
+                                ${interests.includes(interest)
+                                    ? 'bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900 dark:border-purple-700 dark:text-purple-200'
+                                    : 'hover:bg-slate-100 dark:hover:bg-slate-700'
+                                }
+                            `}
+                            onClick={() => toggleInterest(interest)}
+                        >
+                            {interest}
+                        </Badge>
+                    ))}
                 </div>
             </div>
 
             {/* Helper Text */}
-            <div className="text-center text-sm text-slate-500 dark:text-slate-400 pt-4">
-                💡 Tip: Add 2-5 interests for the best gift recommendations
-            </div>
+            <p className="text-xs text-center text-slate-500 dark:text-slate-400">
+                💡 Tip: Semakin spesifik minat yang Anda tambahkan, semakin personal rekomendasi hadiahnya
+            </p>
         </div>
     )
 }

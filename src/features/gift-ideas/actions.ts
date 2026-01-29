@@ -99,6 +99,10 @@ async function callOpenRouterAPI(data: WizardState) {
     const prompt = buildGiftPrompt(data)
 
     console.log('[GIFT] Calling OpenRouter API...')
+    console.log('[GIFT] 📝 Final Prompt being sent to OpenRouter:')
+    console.log('='.repeat(80))
+    console.log(prompt)
+    console.log('='.repeat(80))
 
     // Retry logic for network errors
     const maxRetries = 3

@@ -80,7 +80,7 @@ export function Navbar() {
         { href: '/', label: 'Home' },
         { href: '/kartu/family', label: 'AI Card Generator' },
         { href: '/menu', label: 'Menu Planner' },
-        { href: '/gift', label: 'Gift Ideas' },
+        { href: '/gift-ideas', label: 'Gift Ideas' },
         { href: '/pricing', label: 'Pricing' },
     ]
 

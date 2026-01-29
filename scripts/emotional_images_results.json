@@ -1,0 +1,86 @@
+[
+  {
+    "key": "hero_background",
+    "status": "success",
+    "id": "eda0ff0e-f6a0-463b-b45b-ad315fa82458",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/hero_background_20260129_115913.jpg?"
+  },
+  {
+    "key": "hero_moment_joy",
+    "status": "success",
+    "id": "c9b22400-c6db-46d9-933a-8e93e7e1fb09",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/hero_moment_joy_20260129_115923.jpg?"
+  },
+  {
+    "key": "recipient_parent",
+    "status": "success",
+    "id": "5f291ec6-5975-4693-a0d5-822682922ee9",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/recipient_parent_20260129_115930.jpg?"
+  },
+  {
+    "key": "recipient_spouse",
+    "status": "success",
+    "id": "5e3a786f-aa11-4c11-813d-2600e23552f5",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/recipient_spouse_20260129_115936.jpg?"
+  },
+  {
+    "key": "recipient_child",
+    "status": "success",
+    "id": "c1cb0d1f-0652-4afd-829e-b3de12ae5ee8",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/recipient_child_20260129_115942.jpg?"
+  },
+  {
+    "key": "recipient_sibling",
+    "status": "success",
+    "id": "fd0a87fa-9cde-429d-96d9-7e29d60dd794",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/recipient_sibling_20260129_115946.jpg?"
+  },
+  {
+    "key": "recipient_friend",
+    "status": "success",
+    "id": "1c4a423b-73a9-485d-b43e-b058aa9a537a",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/recipient_friend_20260129_115951.jpg?"
+  },
+  {
+    "key": "recipient_colleague",
+    "status": "success",
+    "id": "eb135634-5697-4bfd-b8cf-1f4095f8df07",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/recipient_colleague_20260129_115955.jpg?"
+  },
+  {
+    "key": "recipient_religious_leader",
+    "status": "success",
+    "id": "b80b0fec-27fd-49a3-93f1-e3c8a1b7c558",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/recipient_religious_leader_20260129_120000.jpg?"
+  },
+  {
+    "key": "joy_unwrapping",
+    "status": "success",
+    "id": "ef08c61b-210e-4727-8336-6866b0d366e8",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/joy_unwrapping_20260129_120005.jpg?"
+  },
+  {
+    "key": "joy_embrace",
+    "status": "success",
+    "id": "ffca0e12-4736-4523-a438-4e61dcea1d92",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/joy_embrace_20260129_120010.jpg?"
+  },
+  {
+    "key": "ramadan_prayer",
+    "status": "success",
+    "id": "0d83a79e-6365-48f0-884f-8adbb37dfddd",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/ramadan_prayer_20260129_120020.jpg?"
+  },
+  {
+    "key": "ramadan_quran",
+    "status": "success",
+    "id": "86a9d1e9-acbf-47f9-a9ee-4f0db81a66d9",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/ramadan_quran_20260129_120030.jpg?"
+  },
+  {
+    "key": "testimonial_daughter",
+    "status": "success",
+    "id": "544dc2db-6331-46d3-817e-15c39a640e3f",
+    "url": "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/gift-ideas/emotional/testimonial_daughter_20260129_120041.jpg?"
+  }
+]
