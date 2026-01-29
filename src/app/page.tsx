@@ -88,7 +88,7 @@ export default function Home() {
               <CardDescription className="dark:text-slate-400">Find thoughtful gifts for your loved ones.</CardDescription>
             </CardHeader>
             <CardFooter>
-              <Link href="/gift" className="w-full">
+              <Link href="/gift-ideas" className="w-full">
                 <Button variant="outline" className="w-full border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 group-hover:bg-purple-600 group-hover:text-white transition-colors">
                   Find Gifts <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>

@@ -3,6 +3,48 @@
 ## [Unreleased]
 
 ### Added
+- **v0.7.0 (Jan 27, 2026) - Admin Dashboard Phase 1** 🎯 **CHECKPOINT: ADMIN_DASHBOARD_V1**
+    - **Feature**: Admin dashboard with authentication, metrics API, and UI
+        - **Database Schema**:
+            - New `admins` table for role-based access control (super_admin, admin, moderator)
+            - New `transactions` table for payment logs and revenue tracking
+            - New `generations` table for AI activity monitoring
+            - New `webhook_logs` table for payment gateway debugging
+            - New `analytics_events` table for user behavior tracking
+            - New `cms_content` table for future CMS integration
+            - Created analytics views: `admin_revenue_summary`, `admin_user_stats`
+        - **Authentication System**:
+            - Created `lib/admin/auth.ts` with `isAdmin()`, `requireAdmin()`, `getAdminRole()` utilities
+            - Uses service role client to bypass RLS and avoid infinite recursion
+            - Admin middleware protects `/admin/*` routes
+        - **API Endpoints**:
+            - `GET /api/admin/stats` - Returns 6 key metrics:
+                - Total revenue (today + all-time)
+                - Total users (active last 30 days, registered today)
+                - Credits sold vs used
+                - AI generations count
+                - Average transaction value
+                - Conversion rate
+        - **Dashboard UI**:
+            - Created `/admin/dashboard` page with metric cards
+            - Sidebar navigation: Dashboard, Users, Transactions, Generations, Settings
+            - Loading states and error handling with retry
+            - Dark mode support, responsive layout
+        - **Navbar Integration**:
+            - Added admin dashboard link to profile dropdown (desktop + mobile)
+            - Purple gradient background with "ADMIN" badge
+            - Checks `admins` table on component mount
+        - **RLS Fix**:
+            - Disabled RLS on `admins` table to resolve infinite recursion issue
+            - Service role client bypasses RLS for admin queries
+            - Safe: no sensitive data in admins table (only user_id → role mapping)
+    - **Documentation**:
+        - Added `docs/MIGRATION_GUIDE.md` for database setup
+        - Added `docs/TROUBLESHOOTING_ADMIN.md` for debugging
+        - Added `docs/GET_SERVICE_ROLE_KEY.md` for environment setup
+    - **Testing**: Admin authentication, metrics accuracy, navbar integration verified
+    - **Next Phase**: User management table, transaction log viewer, revenue charts
+
 - **v0.6.0 (Jan 27, 2026) - Credit-Based Pricing System** 🎯 **CHECKPOINT: PRICING_V1**
     - **Feature**: New `/pricing` route with professional pricing page
         - **Pricing Model**: Shifted from subscription to credit-based bundles for seasonal usage

@@ -3,7 +3,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 const SITE_NAME = 'RamadanHub AI';
 
 export const openRouter = {
-    chat: async (prompt: string, model: string = 'google/gemini-2.0-flash-exp:free') => {
+    chat: async (prompt: string, model: string = 'anthropic/claude-3.5-sonnet') => {
         if (!OPENROUTER_API_KEY) {
             console.warn("OPENROUTER_KEY is missing!");
             throw new Error("OpenRouter API Key missing");
