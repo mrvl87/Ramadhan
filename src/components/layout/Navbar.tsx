@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Moon, Sun, Menu, X, User, LogOut, Coins, LayoutDashboard, Shield } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
+import { RamadanLogo } from '@/components/ui/ramadan-logo'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 export function Navbar() {
     const [mounted, setMounted] = useState(false)
@@ -24,6 +25,7 @@ export function Navbar() {
     const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const { theme, setTheme } = useTheme()
     const router = useRouter()
+    const pathname = usePathname()
 
     useEffect(() => {
         setMounted(true)
@@ -90,22 +92,33 @@ export function Navbar() {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 font-bold text-xl text-emerald-600 dark:text-emerald-400">
-                        <Moon className="w-6 h-6 fill-emerald-600 dark:fill-emerald-400" />
+                        <RamadanLogo className="text-emerald-600 dark:text-emerald-400" size={24} />
                         <span className="hidden sm:inline">RamadanHub AI</span>
                         <span className="sm:hidden">RHAI</span>
                     </Link>
 
                     {/* Desktop Navigation - Centered */}
                     <div className="hidden md:flex items-center gap-6">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href ||
+                                (link.href !== '/' && pathname.startsWith(link.href))
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`text-sm font-medium transition-colors relative ${isActive
+                                        ? 'text-emerald-600 dark:text-emerald-400'
+                                        : 'text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400'
+                                        }`}
+                                    aria-current={isActive ? 'page' : undefined}
+                                >
+                                    {link.label}
+                                    {isActive && (
+                                        <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-emerald-600 dark:bg-emerald-400 rounded-full" />
+                                    )}
+                                </Link>
+                            )
+                        })}
                     </div>
 
                     {/* Right Side: Credits + Theme + Profile */}
@@ -244,16 +257,24 @@ export function Navbar() {
                         )}
 
                         {/* Nav Links */}
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="block px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:text-emerald-600 dark:hover:text-emerald-400 rounded-lg transition-colors"
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href ||
+                                (link.href !== '/' && pathname.startsWith(link.href))
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={`block px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isActive
+                                        ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400'
+                                        : 'text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:text-emerald-600 dark:hover:text-emerald-400'
+                                        }`}
+                                    aria-current={isActive ? 'page' : undefined}
+                                >
+                                    {link.label}
+                                </Link>
+                            )
+                        })}
 
                         {user && (
                             <>

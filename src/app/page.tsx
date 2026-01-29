@@ -31,9 +31,11 @@ export default function Home() {
           <p className="text-xl text-gray-200">
             Make this Ramadan more meaningful with AI-powered tools for your family, food, and festivities.
           </p>
-          <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-8">
-            Get Started
-          </Button>
+          <Link href="/login">
+            <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-8">
+              Get Started
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -43,7 +45,7 @@ export default function Home() {
         <div className="grid md:grid-cols-3 gap-8">
 
           {/* Family Photo */}
-          <Card className="hover:shadow-xl transition-all border-emerald-100 dark:border-emerald-900 dark:bg-slate-900 overflow-hidden group">
+          <Card className="animate-fade-in-up stagger-1 hover:shadow-xl transition-all border-emerald-100 dark:border-emerald-900 dark:bg-slate-900 overflow-hidden group">
             <div className="h-48 bg-emerald-50 dark:bg-emerald-950 relative flex items-center justify-center">
               <Camera className="w-16 h-16 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
             </div>
@@ -61,7 +63,7 @@ export default function Home() {
           </Card>
 
           {/* Menu Generator */}
-          <Card className="hover:shadow-xl transition-all border-orange-100 dark:border-orange-900 dark:bg-slate-900 overflow-hidden group">
+          <Card className="animate-fade-in-up stagger-2 hover:shadow-xl transition-all border-orange-100 dark:border-orange-900 dark:bg-slate-900 overflow-hidden group">
             <div className="h-48 bg-orange-50 dark:bg-orange-950 relative flex items-center justify-center">
               <ChefHat className="w-16 h-16 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-transform" />
             </div>
@@ -79,7 +81,7 @@ export default function Home() {
           </Card>
 
           {/* Gift Recommendation */}
-          <Card className="hover:shadow-xl transition-all border-purple-100 dark:border-purple-900 dark:bg-slate-900 overflow-hidden group">
+          <Card className="animate-fade-in-up stagger-3 hover:shadow-xl transition-all border-purple-100 dark:border-purple-900 dark:bg-slate-900 overflow-hidden group">
             <div className="h-48 bg-purple-50 dark:bg-purple-950 relative flex items-center justify-center">
               <Gift className="w-16 h-16 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform" />
             </div>
@@ -101,7 +103,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 text-center">
-        <p>&copy; 2024 RamadanHub AI. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} RamadanHub AI. All rights reserved.</p>
       </footer>
     </div>
   );
