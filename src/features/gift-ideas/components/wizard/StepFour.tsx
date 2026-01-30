@@ -62,19 +62,19 @@ export function StepFour({
                             key={value}
                             onClick={() => onOccasionChange(value)}
                             className={`
-                cursor-pointer p-4 text-center transition-all hover:shadow-md
+                cursor-pointer p-4 text-center transition-all hover:shadow-warm-md
                 border-2
                 ${occasion === value
-                                    ? 'border-purple-500 ring-2 ring-purple-200 bg-purple-50 dark:bg-purple-950'
-                                    : 'border-slate-200 dark:border-slate-700 hover:border-purple-300'
+                                    ? 'border-primary ring-2 ring-primary/20 bg-accent'
+                                    : 'border-border hover:border-primary/50'
                                 }
               `}
                         >
                             <div className="text-3xl mb-2">{icon}</div>
-                            <p className={`font-semibold text-sm mb-1 ${occasion === value ? 'text-purple-900 dark:text-purple-100' : 'text-slate-900 dark:text-white'}`}>
+                            <p className={`font-semibold text-sm mb-1 ${occasion === value ? 'text-amber-900 dark:text-amber-100' : 'text-foreground'}`}>
                                 {label}
                             </p>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                            <p className="text-xs text-muted-foreground">
                                 {description}
                             </p>
                         </Card>
@@ -101,17 +101,17 @@ export function StepFour({
             </div>
 
             {/* Ready to Generate */}
-            <div className="p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 rounded-lg border border-purple-200 dark:border-purple-800">
+            <div className="p-6 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950 dark:to-yellow-950 rounded-lg border border-primary/30">
                 <div className="flex items-start gap-4">
                     <div className="text-4xl">🎁</div>
                     <div>
-                        <h3 className="font-semibold text-purple-900 dark:text-purple-100 mb-1">
+                        <h3 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
                             Ready to find the perfect gift?
                         </h3>
-                        <p className="text-sm text-purple-700 dark:text-purple-300">
+                        <p className="text-sm text-amber-700 dark:text-amber-300">
                             Click "Generate Gift Ideas" to get 5 personalized gift recommendations powered by AI.
                         </p>
-                        <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">
+                        <p className="text-xs text-primary mt-2">
                             💎 Cost: 10 credits
                         </p>
                     </div>

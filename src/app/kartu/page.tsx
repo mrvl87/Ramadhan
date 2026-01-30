@@ -79,17 +79,17 @@ export default function CardGeneratorPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 pb-20">
+        <div className="min-h-screen bg-background pb-20">
             {/* Header / Credit Bar */}
-            <header className="sticky top-0 z-10 border-b bg-white/80 backdrop-blur-md px-4 py-3 dark:bg-neutral-900/80">
+            <header className="sticky top-0 z-10 border-b border-border/50 bg-card/80 backdrop-blur-md px-4 py-3">
                 <div className="container mx-auto max-w-4xl flex items-center justify-between">
                     <div className="flex items-center gap-2 font-bold text-lg">
-                        <Sparkles className="h-5 w-5 text-amber-500" />
-                        <span>Kartu AI</span>
+                        <Sparkles className="h-5 w-5 text-primary" />
+                        <span className="text-gradient-gold">Kartu AI</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm font-medium">
                         {isPro ? (
-                            <span className="text-amber-600 bg-amber-100 px-2 py-1 rounded-full">PRO UNLOCKED</span>
+                            <span className="text-primary bg-accent px-3 py-1 rounded-full font-semibold">PRO UNLOCKED</span>
                         ) : (
                             <span className="text-muted-foreground flex items-center gap-1">
                                 <CreditIcon className="h-4 w-4" />
@@ -104,7 +104,7 @@ export default function CardGeneratorPage() {
 
                 {/* 1. Card Type Selection */}
                 <section className="space-y-3">
-                    <Label className="text-lg">1. Pilih Gaya Kartu (Card Type)</Label>
+                    <Label className="text-lg font-semibold">1. Pilih Gaya Kartu (Card Type)</Label>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         {/* Simple Toggle Buttons for now */}
                         {[
@@ -116,7 +116,7 @@ export default function CardGeneratorPage() {
                             <button
                                 key={t.id}
                                 onClick={() => setCardType(t.id as CardType)}
-                                className={`p-3 text-sm rounded-lg border-2 transition-all ${cardType === t.id ? 'border-green-600 bg-green-50 font-bold' : 'border-transparent bg-white hover:border-gray-200'}`}
+                                className={`p-3 text-sm rounded-lg border-2 transition-all shadow-warm-sm ${cardType === t.id ? 'border-primary bg-accent font-bold text-primary' : 'border-transparent bg-card hover:border-border hover:shadow-warm-md'}`}
                             >
                                 {t.label}
                             </button>
@@ -126,13 +126,13 @@ export default function CardGeneratorPage() {
 
                 {/* 2. Theme Selection */}
                 <section className="space-y-3">
-                    <Label className="text-lg">2. Pilih Nuansa (Theme)</Label>
+                    <Label className="text-lg font-semibold">2. Pilih Nuansa (Theme)</Label>
                     <ThemeSelector selectedTheme={theme} onSelect={setTheme} />
                 </section>
 
                 {/* 3. Input Data */}
                 <section className="space-y-3">
-                    <Label className="text-lg">3. Tulis Pesan / Nama</Label>
+                    <Label className="text-lg font-semibold">3. Tulis Pesan / Nama</Label>
                     <Input
                         value={text}
                         onChange={(e) => setText(e.target.value)}
@@ -147,10 +147,11 @@ export default function CardGeneratorPage() {
                 {/* 4. Action */}
                 <section className="pt-4 pb-20">
                     <Button
-                        size="lg"
+                        variant="gold"
+                        size="xl"
                         onClick={handleGenerate}
                         disabled={loading || (credits === 0 && !isPro)}
-                        className="w-full h-14 text-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg shadow-green-900/20"
+                        className="w-full"
                     >
                         {loading ? (
                             <span className="flex items-center gap-2">
@@ -164,10 +165,10 @@ export default function CardGeneratorPage() {
                     </Button>
                     {!isPro && credits === 0 && (
                         <div className="text-center mt-3 space-y-2">
-                            <p className="text-red-500 text-sm font-medium">
+                            <p className="text-destructive text-sm font-medium">
                                 Credits habis.
                             </p>
-                            <Button variant="outline" onClick={() => setPaywallOpen(true)} className="w-full border-amber-500 text-amber-600 hover:bg-amber-50">
+                            <Button variant="outline" onClick={() => setPaywallOpen(true)} className="w-full border-primary text-primary hover:bg-accent">
                                 Upgrade to Pro to Continue
                             </Button>
                         </div>
@@ -176,8 +177,8 @@ export default function CardGeneratorPage() {
 
                 {/* Result */}
                 {imageUrl && (
-                    <section className="bg-white p-4 rounded-xl shadow-lg border animate-in fade-in slide-in-from-bottom-10 duration-500">
-                        <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-gray-100 mb-4">
+                    <section className="bg-card p-4 rounded-xl shadow-warm-lg border-0 animate-in fade-in slide-in-from-bottom-10 duration-500">
+                        <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-muted mb-4">
                             <Image src={imageUrl} alt="Result" fill className="object-contain" unoptimized />
                         </div>
                         <div className="flex gap-2">
@@ -185,7 +186,7 @@ export default function CardGeneratorPage() {
                                 Download / Share
                             </Button>
                             {!isPro && (
-                                <Button variant="default" className="flex-1 bg-amber-500 hover:bg-amber-600">
+                                <Button variant="gold" className="flex-1">
                                     Remove Watermark
                                 </Button>
                             )}

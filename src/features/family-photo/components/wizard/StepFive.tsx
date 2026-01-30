@@ -42,7 +42,7 @@ export function StepFive({ config, updateConfig, onGenerate, isGenerating }: Ste
 
             {/* Aspect Ratio */}
             <div className="space-y-3">
-                <label className="text-sm font-bold text-emerald-950 dark:text-emerald-100 block">Rasio Foto</label>
+                <label className="text-sm font-bold text-foreground block">Rasio Foto</label>
                 <div className="grid grid-cols-4 gap-2">
                     {ratios.map((r) => (
                         <button
@@ -51,8 +51,8 @@ export function StepFive({ config, updateConfig, onGenerate, isGenerating }: Ste
                             className={cn(
                                 "flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all",
                                 config.aspectRatio === r.id
-                                    ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
-                                    : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:border-emerald-200 dark:hover:border-emerald-700"
+                                    ? "border-primary bg-accent text-primary"
+                                    : "border-border bg-card text-muted-foreground hover:border-primary/50"
                             )}
                         >
                             <r.icon className="w-5 h-5 mb-1" />
@@ -65,11 +65,11 @@ export function StepFive({ config, updateConfig, onGenerate, isGenerating }: Ste
             {/* Greeting Generator */}
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                    <label className="text-sm font-bold text-emerald-950 dark:text-emerald-100 block">Ucapan & Teks (Opsional)</label>
+                    <label className="text-sm font-bold text-foreground block">Ucapan & Teks (Opsional)</label>
                     <button
                         onClick={handleRefreshGreeting}
                         disabled={isGreetingLoading}
-                        className="text-xs flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 disabled:opacity-50"
+                        className="text-xs flex items-center gap-1 text-primary hover:text-primary/80 disabled:opacity-50"
                     >
                         <RefreshCw className={cn("w-3 h-3", isGreetingLoading && "animate-spin")} />
                         {isGreetingLoading ? "Menulis..." : "Buatkan Ide"}
@@ -82,14 +82,14 @@ export function StepFive({ config, updateConfig, onGenerate, isGenerating }: Ste
                         placeholder="Untuk siapa? (Cth: Keluarga Besar Bani Ismail)"
                         value={config.greeting.recipient}
                         onChange={(e) => updateConfig({ greeting: { ...config.greeting, recipient: e.target.value } })}
-                        className="w-full text-sm p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 outline-none"
+                        className="w-full text-sm p-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none"
                     />
                     <textarea
                         placeholder="Tulis ucapan lebaran atau gunakan tombol 'Buatkan Ide'..."
                         value={config.greeting.message}
                         onChange={(e) => updateConfig({ greeting: { ...config.greeting, message: e.target.value, generated: false } })}
                         rows={3}
-                        className="w-full text-sm p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
+                        className="w-full text-sm p-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none resize-none"
                     />
                 </div>
             </div>
@@ -97,9 +97,11 @@ export function StepFive({ config, updateConfig, onGenerate, isGenerating }: Ste
             {/* Final Action */}
             <div className="pt-4">
                 <Button
+                    variant="gold"
+                    size="xl"
                     onClick={onGenerate}
                     disabled={isGenerating}
-                    className="w-full h-12 text-lg bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white shadow-lg shadow-emerald-200 dark:shadow-emerald-900/50"
+                    className="w-full"
                 >
                     {isGenerating ? "Menciptakan Foto..." : "GENERATE IMAGE ✨"}
                 </Button>
