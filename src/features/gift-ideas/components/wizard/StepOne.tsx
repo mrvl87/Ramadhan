@@ -55,8 +55,8 @@ export function StepOne({ value, onChange }: StepOneProps) {
                             className={`
                 relative overflow-hidden rounded-2xl p-6 text-center transition-all
                 ${isSelected
-                                    ? 'ring-4 ring-purple-500 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 scale-105 shadow-xl'
-                                    : 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-lg'
+                                    ? 'ring-4 ring-primary bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-950 dark:to-yellow-950 scale-105 shadow-warm-xl'
+                                    : 'bg-card hover:bg-accent hover:shadow-warm-lg'
                                 }
               `}
                         >
@@ -88,8 +88,8 @@ export function StepOne({ value, onChange }: StepOneProps) {
                                         className={`
                       w-12 h-12 transition-all p-2 rounded-xl
                       ${isSelected
-                                                ? 'bg-white dark:bg-slate-900 shadow-lg text-purple-600 scale-110'
-                                                : 'bg-slate-100 dark:bg-slate-700 text-slate-500'
+                                                ? 'bg-white dark:bg-slate-900 shadow-warm-lg text-primary scale-110'
+                                                : 'bg-muted text-muted-foreground'
                                             }
                     `}
                                     />
@@ -98,7 +98,7 @@ export function StepOne({ value, onChange }: StepOneProps) {
                                         <motion.div
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
-                                            className="absolute -top-2 -right-2 bg-purple-600 text-white p-1 rounded-full shadow-lg"
+                                            className="absolute -top-2 -right-2 bg-primary text-white p-1 rounded-full shadow-warm-lg"
                                         >
                                             <Check className="w-4 h-4" />
                                         </motion.div>
@@ -110,8 +110,8 @@ export function StepOne({ value, onChange }: StepOneProps) {
                                     className={`
                     font-semibold mb-1 transition-colors
                     ${isSelected
-                                            ? 'text-purple-900 dark:text-purple-100'
-                                            : 'text-slate-900 dark:text-white'
+                                            ? 'text-amber-900 dark:text-amber-100'
+                                            : 'text-foreground'
                                         }
                   `}
                                 >
@@ -123,8 +123,8 @@ export function StepOne({ value, onChange }: StepOneProps) {
                                     className={`
                     text-xs transition-colors
                     ${isSelected
-                                            ? 'text-purple-700 dark:text-purple-300 font-medium'
-                                            : 'text-slate-500 dark:text-slate-400'
+                                            ? 'text-amber-700 dark:text-amber-300 font-medium'
+                                            : 'text-muted-foreground'
                                         }
                   `}
                                 >
@@ -136,7 +136,7 @@ export function StepOne({ value, onChange }: StepOneProps) {
                             {isSelected && (
                                 <motion.div
                                     layoutId="selectedBorder"
-                                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 to-pink-600"
+                                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-yellow-500"
                                 />
                             )}
                         </motion.button>
@@ -149,9 +149,9 @@ export function StepOne({ value, onChange }: StepOneProps) {
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center p-4 bg-purple-50 dark:bg-purple-950 rounded-xl"
+                    className="text-center p-4 bg-accent rounded-xl"
                 >
-                    <p className="text-sm text-purple-800 dark:text-purple-200">
+                    <p className="text-sm text-amber-800 dark:text-amber-200">
                         💝 Sempurna! Kami akan mencari hadiah yang{' '}
                         <span className="font-bold">istimewa</span> untuk{' '}
                         {RECIPIENT_TYPES.find((t) => t.type === value)?.label.toLowerCase()}

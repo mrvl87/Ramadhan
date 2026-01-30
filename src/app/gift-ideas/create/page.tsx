@@ -111,14 +111,14 @@ export default function CreateGiftIdeasPage() {
 
     return (
         <ImageCacheProvider>
-            <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-pink-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+            <div className="min-h-screen bg-background">
                 <div className="max-w-4xl mx-auto px-4 py-12">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-3">
+                        <h1 className="text-4xl font-bold text-foreground mb-3">
                             🎁 Find the Perfect Gift
                         </h1>
-                        <p className="text-slate-600 dark:text-slate-400">
+                        <p className="text-muted-foreground">
                             AI-powered gift recommendations for Ramadan & Eid
                         </p>
                     </div>
@@ -126,16 +126,16 @@ export default function CreateGiftIdeasPage() {
                     {/* Progress Indicator */}
                     <div className="mb-8">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                            <span className="text-sm font-medium text-muted-foreground">
                                 Step {currentStep} of {totalSteps}
                             </span>
-                            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
+                            <span className="text-sm font-medium text-primary">
                                 {Math.round((currentStep / totalSteps) * 100)}% Complete
                             </span>
                         </div>
-                        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                        <div className="w-full bg-muted rounded-full h-2">
                             <div
-                                className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full transition-all duration-300"
+                                className="bg-gradient-to-r from-amber-500 to-yellow-500 h-2 rounded-full transition-all duration-300"
                                 style={{ width: `${(currentStep / totalSteps) * 100}%` }}
                             />
                         </div>
@@ -194,7 +194,8 @@ export default function CreateGiftIdeasPage() {
                             <Button
                                 onClick={handleNext}
                                 disabled={!canProceed() || isGenerating}
-                                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 gap-2"
+                                variant="gold"
+                                className="gap-2"
                             >
                                 Next
                                 <ArrowRight className="w-4 h-4" />
@@ -203,7 +204,8 @@ export default function CreateGiftIdeasPage() {
                             <Button
                                 onClick={handleGenerate}
                                 disabled={!canProceed() || isGenerating}
-                                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 gap-2 min-w-[200px]"
+                                variant="gold"
+                                className="gap-2 min-w-[200px]"
                             >
                                 {isGenerating ? (
                                     <>
@@ -228,10 +230,10 @@ export default function CreateGiftIdeasPage() {
                                 className={`
                 w-2 h-2 rounded-full transition-all duration-300
                 ${currentStep > idx + 1
-                                        ? 'bg-purple-600 dark:bg-purple-400'
+                                        ? 'bg-primary'
                                         : currentStep === idx + 1
-                                            ? 'bg-purple-600 dark:bg-purple-400 w-4'
-                                            : 'bg-slate-300 dark:bg-slate-700'
+                                            ? 'bg-primary w-4'
+                                            : 'bg-muted'
                                     }
               `}
                             />

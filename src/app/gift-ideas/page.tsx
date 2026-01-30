@@ -15,7 +15,7 @@ export default async function GiftIdeasLandingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-amber-50 via-cream to-pink-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+        <div className="min-h-screen bg-background">
             {/* Hero Section - Emotional Hook */}
             <section className="relative overflow-hidden">
                 {/* Background Image */}
@@ -42,15 +42,15 @@ export default async function GiftIdeasLandingPage() {
                 <div className="relative container mx-auto px-4 py-20 md:py-32">
                     <div className="max-w-4xl mx-auto text-center">
                         {/* Trust Badge */}
-                        <Badge className="mb-6 bg-gradient-to-r from-amber-600 to-orange-600 text-white border-0 px-4 py-2">
+                        <Badge className="mb-6 bg-gradient-to-r from-amber-500 to-yellow-500 text-white border-0 px-4 py-2">
                             <span className="mr-2">🌙</span>
                             Khusus untuk Keluarga Muslim Indonesia
                         </Badge>
 
                         {/* Main Headline */}
-                        <h1 className="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+                        <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
                             Hadiah yang{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                            <span className="text-gradient-gold">
                                 Menyentuh Hati
                             </span>
                             ,<br />
@@ -58,9 +58,9 @@ export default async function GiftIdeasLandingPage() {
                         </h1>
 
                         {/* Subheadline */}
-                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+                        <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
                             AI membantu Anda menemukan hadiah yang akan mereka{' '}
-                            <span className="font-semibold text-purple-600 dark:text-purple-400">
+                            <span className="font-semibold text-primary">
                                 kenang selamanya
                             </span>
                         </p>
@@ -70,7 +70,8 @@ export default async function GiftIdeasLandingPage() {
                             <Link href="/gift-ideas/create">
                                 <Button
                                     size="lg"
-                                    className="w-full sm:w-auto text-lg px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all gap-2 group"
+                                    variant="gold"
+                                    className="w-full sm:w-auto text-lg px-8 py-6 gap-2 group"
                                 >
                                     <span>🎁</span>
                                     Temukan Hadiah Sempurna
@@ -81,7 +82,7 @@ export default async function GiftIdeasLandingPage() {
                             <Button
                                 size="lg"
                                 variant="outline"
-                                className="w-full sm:w-auto text-lg px-8 py-6 border-2 border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950 gap-2"
+                                className="w-full sm:w-auto text-lg px-8 py-6 border-2 border-primary/30 hover:bg-accent gap-2"
                             >
                                 <span>💭</span>
                                 Lihat Contoh Hadiah
@@ -89,10 +90,10 @@ export default async function GiftIdeasLandingPage() {
                         </div>
 
                         {/* Social Proof */}
-                        <div className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400">
-                            <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
+                        <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                            <Heart className="w-5 h-5 text-primary fill-primary" />
                             <p className="text-sm md:text-base">
-                                <span className="font-bold text-purple-600 dark:text-purple-400">1,247 keluarga</span>
+                                <span className="font-bold text-primary">1,247 keluarga</span>
                                 {' '}telah menemukan hadiah istimewa minggu ini
                             </p>
                         </div>
@@ -168,43 +169,43 @@ export default async function GiftIdeasLandingPage() {
             {/* Features Section */}
             <section className="py-20">
                 <div className="container mx-auto px-4">
-                    <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 dark:text-white mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">
                         Kenapa AI Kami Berbeda?
                     </h2>
 
                     <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4">
+                        <div className="bg-card rounded-2xl p-8 shadow-warm-lg hover:shadow-warm-xl transition-shadow">
+                            <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center mb-4">
                                 <Sparkles className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
+                            <h3 className="text-xl font-bold mb-3 text-foreground">
                                 Dipahami AI, Bukan Dicari Manual
                             </h3>
-                            <p className="text-slate-600 dark:text-slate-400">
+                            <p className="text-muted-foreground">
                                 AI kami memahami hubungan, kepribadian, dan momen spesial Anda
                             </p>
                         </div>
 
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                            <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center mb-4">
+                        <div className="bg-card rounded-2xl p-8 shadow-warm-lg hover:shadow-warm-xl transition-shadow">
+                            <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4">
                                 <Heart className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
+                            <h3 className="text-xl font-bold mb-3 text-foreground">
                                 Budaya & Spiritual Indonesia
                             </h3>
-                            <p className="text-slate-600 dark:text-slate-400">
+                            <p className="text-muted-foreground">
                                 Semua rekomendasi halal, Islami, dan sesuai budaya Indonesia
                             </p>
                         </div>
 
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                            <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center mb-4">
+                        <div className="bg-card rounded-2xl p-8 shadow-warm-lg hover:shadow-warm-xl transition-shadow">
+                            <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center mb-4">
                                 <Zap className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
+                            <h3 className="text-xl font-bold mb-3 text-foreground">
                                 Hasil Instan, Langsung Beli
                             </h3>
-                            <p className="text-slate-600 dark:text-slate-400">
+                            <p className="text-muted-foreground">
                                 2 menit dapat 5 rekomendasi + link langsung ke toko online
                             </p>
                         </div>
@@ -213,26 +214,26 @@ export default async function GiftIdeasLandingPage() {
             </section>
 
             {/* How It Works - Emotional Journey */}
-            <section className="py-20 bg-gradient-to-b from-purple-50 to-pink-50 dark:from-slate-900 dark:to-slate-800">
+            <section className="py-20 bg-accent/50">
                 <div className="container mx-auto px-4">
-                    <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 dark:text-white mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4">
                         3 Langkah Menuju Senyum Bahagia Mereka
                     </h2>
-                    <p className="text-center text-slate-600 dark:text-slate-400 mb-16">
+                    <p className="text-center text-muted-foreground mb-16">
                         Bukan sekadar mencari produk, tapi memahami perasaan
                     </p>
 
                     <div className="max-w-3xl mx-auto space-y-12">
                         {/* Step 1 */}
                         <div className="flex flex-col md:flex-row gap-6 items-center">
-                            <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                            <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-warm-lg">
                                 1
                             </div>
-                            <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg">
-                                <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
+                            <div className="flex-1 bg-card rounded-xl p-6 shadow-warm-md">
+                                <h3 className="text-2xl font-bold mb-2 text-foreground">
                                     Ceritakan Tentang Mereka
                                 </h3>
-                                <p className="text-slate-600 dark:text-slate-400">
+                                <p className="text-muted-foreground">
                                     Siapa yang ingin Anda bahagiakan? Apa yang mereka sukai? Kami akan mendengar dengan seksama.
                                 </p>
                             </div>
@@ -240,19 +241,19 @@ export default async function GiftIdeasLandingPage() {
 
                         {/* Connector */}
                         <div className="flex justify-center">
-                            <div className="w-1 h-12 bg-gradient-to-b from-purple-300 to-pink-300 rounded-full" />
+                            <div className="w-1 h-12 bg-gradient-to-b from-amber-300 to-teal-300 rounded-full" />
                         </div>
 
                         {/* Step 2 */}
                         <div className="flex flex-col md:flex-row gap-6 items-center">
-                            <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-pink-600 to-red-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                            <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-warm-lg">
                                 2
                             </div>
-                            <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg">
-                                <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
+                            <div className="flex-1 bg-card rounded-xl p-6 shadow-warm-md">
+                                <h3 className="text-2xl font-bold mb-2 text-foreground">
                                     AI Kami Memahami Mereka
                                 </h3>
-                                <p className="text-slate-600 dark:text-slate-400">
+                                <p className="text-muted-foreground">
                                     Bukan sekadar mencari produk, tapi memahami PERASAAN. AI terlatih dengan ribuan cerita hadiah sukses.
                                 </p>
                             </div>
@@ -260,19 +261,19 @@ export default async function GiftIdeasLandingPage() {
 
                         {/* Connector */}
                         <div className="flex justify-center">
-                            <div className="w-1 h-12 bg-gradient-to-b from-pink-300 to-orange-300 rounded-full" />
+                            <div className="w-1 h-12 bg-gradient-to-b from-teal-300 to-amber-300 rounded-full" />
                         </div>
 
                         {/* Step 3 */}
                         <div className="flex flex-col md:flex-row gap-6 items-center">
-                            <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-orange-600 to-amber-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                            <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-warm-lg">
                                 3
                             </div>
-                            <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg">
-                                <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
+                            <div className="flex-1 bg-card rounded-xl p-6 shadow-warm-md">
+                                <h3 className="text-2xl font-bold mb-2 text-foreground">
                                     Temukan Hadiah yang Menyentuh Hati
                                 </h3>
-                                <p className="text-slate-600 dark:text-slate-400">
+                                <p className="text-muted-foreground">
                                     5 rekomendasi yang dipilih khusus untuk hubungan Anda. Bukan asal cocok, tapi SEMPURNA.
                                 </p>
                             </div>
@@ -282,21 +283,21 @@ export default async function GiftIdeasLandingPage() {
                     {/* Quick Stats */}
                     <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-8 text-center">
                         <div>
-                            <Clock className="w-6 h-6 mx-auto mb-2 text-purple-600" />
-                            <p className="text-sm text-slate-600 dark:text-slate-400">
-                                Hanya <span className="font-bold text-purple-600">2 menit</span>
+                            <Clock className="w-6 h-6 mx-auto mb-2 text-primary" />
+                            <p className="text-sm text-muted-foreground">
+                                Hanya <span className="font-bold text-primary">2 menit</span>
                             </p>
                         </div>
                         <div>
-                            <Sparkles className="w-6 h-6 mx-auto mb-2 text-pink-600" />
-                            <p className="text-sm text-slate-600 dark:text-slate-400">
-                                Gratis <span className="font-bold text-pink-600">selamanya</span>
+                            <Sparkles className="w-6 h-6 mx-auto mb-2 text-secondary" />
+                            <p className="text-sm text-muted-foreground">
+                                Gratis <span className="font-bold text-secondary">selamanya</span>
                             </p>
                         </div>
                         <div>
-                            <CheckCircle2 className="w-6 h-6 mx-auto mb-2 text-amber-600" />
-                            <p className="text-sm text-slate-600 dark:text-slate-400">
-                                <span className="font-bold text-amber-600">10 credits</span> (~Rp 500)
+                            <CheckCircle2 className="w-6 h-6 mx-auto mb-2 text-primary" />
+                            <p className="text-sm text-muted-foreground">
+                                <span className="font-bold text-primary">10 credits</span> (~Rp 500)
                             </p>
                         </div>
                     </div>
@@ -304,7 +305,7 @@ export default async function GiftIdeasLandingPage() {
             </section>
 
             {/* Final CTA */}
-            <section className="py-20 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 relative overflow-hidden">
+            <section className="py-20 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 relative overflow-hidden">
                 {/* Floating particles */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {[...Array(20)].map((_, i) => (
@@ -333,7 +334,7 @@ export default async function GiftIdeasLandingPage() {
                         <Link href="/gift-ideas/create">
                             <Button
                                 size="lg"
-                                className="text-lg px-12 py-7 bg-white text-purple-600 hover:bg-slate-100 shadow-2xl hover:shadow-3xl transition-all gap-3 group"
+                                className="text-lg px-12 py-7 bg-white text-primary hover:bg-accent shadow-warm-xl transition-all gap-3 group"
                             >
                                 <span>🎁</span>
                                 <span className="font-bold">Temukan Hadiah Sempurna Sekarang</span>

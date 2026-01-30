@@ -44,8 +44,8 @@ export function StepThree({ config, updateConfig }: StepThreeProps) {
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="text-center">
-                <h3 className="text-xl font-bold text-emerald-950 dark:text-emerald-100">Pilih Busana (Outfit)</h3>
-                <p className="text-sm text-emerald-600 dark:text-emerald-400">Apa tema baju lebaran tahun ini?</p>
+                <h3 className="text-xl font-bold text-foreground">Pilih Busana (Outfit)</h3>
+                <p className="text-sm text-primary">Apa tema baju lebaran tahun ini?</p>
             </div>
 
             <div className="grid grid-cols-1 gap-3">
@@ -54,10 +54,10 @@ export function StepThree({ config, updateConfig }: StepThreeProps) {
                         key={item.id}
                         onClick={() => updateConfig({ outfit: item.id as any })}
                         className={cn(
-                            "flex items-center p-3 border-2 rounded-xl transition-all hover:shadow-md text-left gap-4",
+                            "flex items-center p-3 border-2 rounded-xl transition-all hover:shadow-warm-md text-left gap-4",
                             config.outfit === item.id
-                                ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-900/50 ring-1 ring-emerald-200 dark:ring-emerald-700"
-                                : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-emerald-200 dark:hover:border-emerald-700"
+                                ? "border-primary bg-accent ring-1 ring-primary/20"
+                                : "border-border bg-card hover:border-primary/50"
                         )}
                     >
                         {/* Swatch */}
@@ -72,11 +72,11 @@ export function StepThree({ config, updateConfig }: StepThreeProps) {
                         </div>
 
                         <div className="flex-1">
-                            <div className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                            <div className="font-bold text-foreground flex items-center gap-2">
                                 {item.label}
-                                {item.id === 'auto_ai' && <Sparkles className="w-4 h-4 text-purple-500 dark:text-purple-400" />}
+                                {item.id === 'auto_ai' && <Sparkles className="w-4 h-4 text-secondary" />}
                             </div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">{item.desc}</div>
+                            <div className="text-xs text-muted-foreground">{item.desc}</div>
                         </div>
                     </button>
                 ))}

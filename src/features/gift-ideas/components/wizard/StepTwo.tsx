@@ -33,18 +33,18 @@ export function StepTwo({ budgetMin, budgetMax, onChange }: StepTwoProps) {
                             key={preset.label}
                             onClick={() => onChange(preset.min, preset.max)}
                             className={`
-                cursor-pointer p-4 text-center transition-all hover:shadow-md
+                cursor-pointer p-4 text-center transition-all hover:shadow-warm-md
                 border-2
                 ${isSelected
-                                    ? 'border-purple-500 ring-2 ring-purple-200 bg-purple-50 dark:bg-purple-950'
-                                    : 'border-slate-200 dark:border-slate-700 hover:border-purple-300'
+                                    ? 'border-primary ring-2 ring-primary/20 bg-accent'
+                                    : 'border-border hover:border-primary/50'
                                 }
               `}
                         >
-                            <p className={`font-bold text-lg mb-1 ${isSelected ? 'text-purple-900 dark:text-purple-100' : 'text-slate-900 dark:text-white'}`}>
+                            <p className={`font-bold text-lg mb-1 ${isSelected ? 'text-amber-900 dark:text-amber-100' : 'text-foreground'}`}>
                                 {preset.label}
                             </p>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                            <p className="text-xs text-muted-foreground">
                                 {preset.description}
                             </p>
                         </Card>
@@ -64,7 +64,7 @@ export function StepTwo({ budgetMin, budgetMax, onChange }: StepTwoProps) {
                         <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                             Minimum Budget
                         </label>
-                        <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                        <span className="text-lg font-bold text-primary">
                             Rp {budgetMin.toLocaleString('id-ID')}
                         </span>
                     </div>
@@ -84,7 +84,7 @@ export function StepTwo({ budgetMin, budgetMax, onChange }: StepTwoProps) {
                         <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                             Maximum Budget
                         </label>
-                        <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                        <span className="text-lg font-bold text-primary">
                             Rp {budgetMax.toLocaleString('id-ID')}
                         </span>
                     </div>
@@ -99,11 +99,11 @@ export function StepTwo({ budgetMin, budgetMax, onChange }: StepTwoProps) {
                 </div>
 
                 {/* Budget Range Display */}
-                <div className="text-center p-4 bg-purple-50 dark:bg-purple-950 rounded-lg">
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">
+                <div className="text-center p-4 bg-accent rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-1">
                         Selected Budget Range
                     </p>
-                    <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                    <p className="text-2xl font-bold text-primary">
                         Rp {budgetMin.toLocaleString('id-ID')} - Rp {budgetMax.toLocaleString('id-ID')}
                     </p>
                 </div>

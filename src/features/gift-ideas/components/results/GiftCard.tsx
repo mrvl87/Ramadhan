@@ -25,16 +25,16 @@ export function GiftCard({ gift, index }: GiftCardProps) {
     }
 
     return (
-        <Card className="overflow-hidden hover:shadow-xl transition-all border-purple-100 dark:border-purple-900 group">
+        <Card className="overflow-hidden hover:shadow-warm-xl transition-all border-primary/20 group">
             {/* Card Header with Rank Badge */}
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 pb-4">
+            <CardHeader className="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950 dark:to-yellow-950 pb-4">
                 <div className="flex items-start justify-between">
-                    <Badge className="bg-purple-600 text-white px-3 py-1">
+                    <Badge className="bg-primary text-white px-3 py-1">
                         <Sparkles className="w-3 h-3 mr-1" />
                         Gift #{index + 1}
                     </Badge>
                     <div className="text-right">
-                        <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                        <p className="text-2xl font-bold text-primary">
                             Rp {gift.price.toLocaleString('id-ID')}
                         </p>
                     </div>
@@ -43,7 +43,7 @@ export function GiftCard({ gift, index }: GiftCardProps) {
 
             {/* Gift Details */}
             <CardContent className="pt-6 pb-4">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                     {gift.name}
                 </h3>
 
@@ -65,7 +65,7 @@ export function GiftCard({ gift, index }: GiftCardProps) {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => handleBuyClick(store)}
-                                    className="gap-2 hover:bg-purple-50 dark:hover:bg-purple-950 hover:border-purple-300 dark:hover:border-purple-700 transition-colors"
+                                    className="gap-2 hover:bg-accent hover:border-primary/50 transition-colors"
                                 >
                                     <span className="text-base">{storeConfig?.icon || '🛒'}</span>
                                     <span className="text-xs">{store}</span>
@@ -78,9 +78,10 @@ export function GiftCard({ gift, index }: GiftCardProps) {
             </CardContent>
 
             {/* Main CTA Footer */}
-            <CardFooter className="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <CardFooter className="bg-muted border-t border-border">
                 <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 gap-2"
+                    variant="gold"
+                    className="w-full gap-2"
                     onClick={() => handleBuyClick(gift.where_to_buy[0])}
                 >
                     <ShoppingCart className="w-4 h-4" />

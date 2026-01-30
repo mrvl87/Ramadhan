@@ -114,7 +114,7 @@ export function StepThree({ interests, onChange }: StepThreeProps) {
                 <Button
                     onClick={handleAddCustom}
                     disabled={!customInterest.trim()}
-                    className="bg-purple-600 hover:bg-purple-700"
+                    variant="gold"
                 >
                     <Plus className="w-4 h-4 mr-2" />
                     Tambah
@@ -132,12 +132,12 @@ export function StepThree({ interests, onChange }: StepThreeProps) {
                             <Badge
                                 key={interest}
                                 variant="secondary"
-                                className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 px-3 py-1.5 text-sm"
+                                className="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 px-3 py-1.5 text-sm"
                             >
                                 {interest}
                                 <button
                                     onClick={() => removeInterest(interest)}
-                                    className="ml-2 hover:text-purple-600 dark:hover:text-purple-400"
+                                    className="ml-2 hover:text-primary"
                                 >
                                     <X className="w-3 h-3" />
                                 </button>
@@ -175,8 +175,8 @@ export function StepThree({ interests, onChange }: StepThreeProps) {
                                 className={`
                                     cursor-pointer transition-all
                                     ${interests.includes(interest)
-                                        ? 'bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900 dark:border-purple-700 dark:text-purple-200'
-                                        : 'hover:bg-slate-100 dark:hover:bg-slate-700'
+                                        ? 'bg-amber-100 border-primary text-amber-800 dark:bg-amber-900 dark:border-primary dark:text-amber-200'
+                                        : 'hover:bg-accent'
                                     }
                                 `}
                                 onClick={() => toggleInterest(interest)}
@@ -201,8 +201,8 @@ export function StepThree({ interests, onChange }: StepThreeProps) {
                             className={`
                                 cursor-pointer transition-all
                                 ${interests.includes(interest)
-                                    ? 'bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900 dark:border-purple-700 dark:text-purple-200'
-                                    : 'hover:bg-slate-100 dark:hover:bg-slate-700'
+                                    ? 'bg-amber-100 border-primary text-amber-800 dark:bg-amber-900 dark:border-primary dark:text-amber-200'
+                                    : 'hover:bg-accent'
                                 }
                             `}
                             onClick={() => toggleInterest(interest)}

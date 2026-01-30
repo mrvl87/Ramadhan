@@ -42,7 +42,7 @@ export default async function GiftResultsPage({ params }: PageProps) {
     const typedGeneration = generation as unknown as GiftGeneration
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-pink-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+        <div className="min-h-screen bg-background">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Back Button */}
                 <Link href="/gift-ideas">
@@ -56,12 +56,12 @@ export default async function GiftResultsPage({ params }: PageProps) {
                 <div className="mb-8">
                     <div className="flex items-start justify-between">
                         <div>
-                            <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
+                            <h1 className="text-4xl font-bold text-foreground mb-2">
                                 🎁 Your Perfect Gift Ideas
                             </h1>
-                            <p className="text-slate-600 dark:text-slate-400 text-lg">
+                            <p className="text-muted-foreground text-lg">
                                 Personalized recommendations for your{' '}
-                                <Badge variant="secondary" className="mx-1">
+                                <Badge variant="secondary" className="mx-1 bg-accent text-accent-foreground">
                                     {typedGeneration.recipient_type}
                                 </Badge>
                             </p>
@@ -85,7 +85,7 @@ export default async function GiftResultsPage({ params }: PageProps) {
                     </div>
 
                     {/* Generation Summary Card */}
-                    <Card className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0">
+                    <Card className="mt-6 bg-gradient-to-r from-amber-500 to-yellow-500 text-white border-0 shadow-warm-lg">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-white">
                                 <Sparkles className="w-5 h-5" />
@@ -94,18 +94,18 @@ export default async function GiftResultsPage({ params }: PageProps) {
                         </CardHeader>
                         <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                             <div>
-                                <p className="text-purple-100 mb-1">Budget Range</p>
+                                <p className="text-amber-100 mb-1">Budget Range</p>
                                 <p className="font-bold">
                                     Rp {typedGeneration.budget_min.toLocaleString('id-ID')} -{' '}
                                     Rp {typedGeneration.budget_max.toLocaleString('id-ID')}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-purple-100 mb-1">Occasion</p>
+                                <p className="text-amber-100 mb-1">Occasion</p>
                                 <p className="font-bold capitalize">{typedGeneration.occasion}</p>
                             </div>
                             <div>
-                                <p className="text-purple-100 mb-1">Interests</p>
+                                <p className="text-amber-100 mb-1">Interests</p>
                                 <p className="font-bold">
                                     {typedGeneration.interests.length > 0
                                         ? typedGeneration.interests.slice(0, 2).join(', ') +
@@ -114,7 +114,7 @@ export default async function GiftResultsPage({ params }: PageProps) {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-purple-100 mb-1">Credits Used</p>
+                                <p className="text-amber-100 mb-1">Credits Used</p>
                                 <p className="font-bold">💎 {typedGeneration.credits_used}</p>
                             </div>
                         </CardContent>
@@ -123,7 +123,7 @@ export default async function GiftResultsPage({ params }: PageProps) {
 
                 {/* Gift Cards Grid */}
                 <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+                    <h2 className="text-2xl font-bold text-foreground mb-6">
                         5 Perfect Gift Recommendations
                     </h2>
 
@@ -136,12 +136,12 @@ export default async function GiftResultsPage({ params }: PageProps) {
 
                 {/* Additional Notes */}
                 {typedGeneration.additional_notes && (
-                    <Card className="mb-8">
+                    <Card className="mb-8 shadow-warm-md">
                         <CardHeader>
-                            <CardTitle className="text-lg">Your Notes</CardTitle>
+                            <CardTitle className="text-lg text-foreground">Your Notes</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-slate-600 dark:text-slate-400">
+                            <p className="text-muted-foreground">
                                 {typedGeneration.additional_notes}
                             </p>
                         </CardContent>
@@ -149,16 +149,16 @@ export default async function GiftResultsPage({ params }: PageProps) {
                 )}
 
                 {/* CTA Section */}
-                <Card className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 border-purple-200 dark:border-purple-800">
+                <Card className="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950 dark:to-yellow-950 border-amber-200 dark:border-amber-800 shadow-warm-lg">
                     <CardContent className="p-8 text-center">
-                        <h3 className="text-2xl font-bold text-purple-900 dark:text-purple-100 mb-3">
+                        <h3 className="text-2xl font-bold text-amber-900 dark:text-amber-100 mb-3">
                             Need More Ideas?
                         </h3>
-                        <p className="text-purple-700 dark:text-purple-300 mb-6">
+                        <p className="text-amber-700 dark:text-amber-300 mb-6">
                             Generate another set of personalized gift recommendations
                         </p>
                         <Link href="/gift-ideas/create">
-                            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 gap-2">
+                            <Button variant="gold" className="gap-2">
                                 <Sparkles className="w-4 h-4" />
                                 Generate More Gifts
                             </Button>

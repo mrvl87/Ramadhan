@@ -17,6 +17,17 @@ module.exports = {
             },
         },
         extend: {
+            fontFamily: {
+                sans: ['var(--font-nunito)', 'var(--font-inter)', 'system-ui', 'sans-serif'],
+            },
+            boxShadow: {
+                'warm-sm': '0 1px 2px hsla(35, 40%, 20%, 0.05)',
+                'warm-md': '0 4px 12px hsla(35, 40%, 20%, 0.08)',
+                'warm-lg': '0 10px 30px hsla(35, 40%, 20%, 0.12)',
+                'warm-xl': '0 20px 50px hsla(35, 40%, 20%, 0.15)',
+                'glow-gold': '0 0 20px hsla(40, 65%, 50%, 0.25)',
+                'glow-teal': '0 0 20px hsla(175, 50%, 35%, 0.25)',
+            },
             borderRadius: {
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 2px)",

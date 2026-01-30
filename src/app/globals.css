@@ -4,58 +4,98 @@
 
 @layer base {
   :root {
+    /* Radius */
     --radius: 0.625rem;
-    --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
+
+    /* Background - Warm Cream (not too yellow) */
+    --background: 40 30% 98%;
+    --foreground: 220 15% 15%;
+
+    /* Card - Pure white for contrast */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 220 15% 15%;
+
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
-    --primary: 160 84% 39%;
+    --popover-foreground: 220 15% 15%;
+
+    /* Primary - Crescent Gold (muted, modern) */
+    --primary: 40 65% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 45 93% 47%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84% 60%;
+
+    /* Secondary - Mosque Teal (sophisticated) */
+    --secondary: 175 50% 35%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted */
+    --muted: 40 15% 93%;
+    --muted-foreground: 220 10% 45%;
+
+    /* Accent - Soft Gold */
+    --accent: 40 40% 92%;
+    --accent-foreground: 40 60% 30%;
+
+    /* Destructive */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 160 84% 39%;
-    --chart-1: 160 84% 39%;
-    --chart-2: 45 93% 47%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+
+    /* Border/Input - Warm gray */
+    --border: 40 10% 88%;
+    --input: 40 10% 88%;
+    --ring: 40 65% 50%;
+
+    /* Charts */
+    --chart-1: 40 65% 50%;
+    --chart-2: 175 50% 35%;
+    --chart-3: 200 60% 45%;
+    --chart-4: 28 70% 55%;
+    --chart-5: 340 60% 55%;
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 0 0% 98%;
-    --card: 222 47% 15%;
-    --card-foreground: 0 0% 98%;
-    --popover: 222 47% 15%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 160 84% 39%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 0 0% 60%;
-    --accent: 45 93% 47%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 63% 31%;
+    /* Background - Deep Navy (not pure black) */
+    --background: 222 35% 10%;
+    --foreground: 40 15% 95%;
+
+    /* Card - Elevated surface */
+    --card: 222 30% 14%;
+    --card-foreground: 40 15% 95%;
+
+    /* Popover */
+    --popover: 222 30% 14%;
+    --popover-foreground: 40 15% 95%;
+
+    /* Primary - Brighter Gold for dark */
+    --primary: 40 70% 55%;
+    --primary-foreground: 222 35% 10%;
+
+    /* Secondary - Brighter Teal */
+    --secondary: 175 55% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted */
+    --muted: 222 25% 18%;
+    --muted-foreground: 40 10% 60%;
+
+    /* Accent */
+    --accent: 222 25% 20%;
+    --accent-foreground: 40 50% 70%;
+
+    /* Destructive */
+    --destructive: 0 55% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
-    --ring: 160 84% 39%;
-    --chart-1: 160 84% 39%;
-    --chart-2: 45 93% 47%;
-    --chart-3: 173 58% 39%;
-    --chart-4: 197 71% 73%;
-    --chart-5: 43 74% 66%;
+
+    /* Border/Input */
+    --border: 222 20% 22%;
+    --input: 222 20% 22%;
+    --ring: 40 70% 55%;
+
+    /* Charts */
+    --chart-1: 40 70% 55%;
+    --chart-2: 175 55% 45%;
+    --chart-3: 200 65% 50%;
+    --chart-4: 28 75% 60%;
+    --chart-5: 340 65% 60%;
   }
 }
 
@@ -160,11 +200,105 @@
   background-size: 200% 100%;
 }
 
+/* Shimmer effect for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg,
+      transparent 0%,
+      hsl(var(--primary) / 0.1) 50%,
+      transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Gold glow pulse for emphasis */
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px hsla(40, 65%, 50%, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 25px hsla(40, 65%, 50%, 0.4);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Subtle scale for interactive elements */
+@keyframes subtle-bounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.animate-subtle-bounce {
+  animation: subtle-bounce 2s ease-in-out infinite;
+}
+
+/* Smooth transitions for common properties */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus visible ring enhancement */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px hsla(var(--primary), 0.3);
+}
+
+/* Gradient text utility */
+.text-gradient-gold {
+  background: linear-gradient(135deg, hsl(40, 65%, 50%) 0%, hsl(45, 80%, 55%) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-teal {
+  background: linear-gradient(135deg, hsl(175, 50%, 35%) 0%, hsl(180, 60%, 45%) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: hsla(var(--background), 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsla(var(--border), 0.3);
+}
+
 /* Accessibility: Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
 
   .animate-float,
-  .animate-float-delayed {
+  .animate-float-delayed,
+  .animate-shimmer,
+  .animate-glow-pulse,
+  .animate-subtle-bounce {
     animation: none;
   }
 

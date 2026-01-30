@@ -22,40 +22,65 @@ export default function Home() {
     }
   }, []);
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      {/* Hero Section */}
-      <section className="bg-[url('/assets/hero-bg.jpg')] bg-cover bg-center relative h-[500px] flex items-center justify-center text-center px-4">
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 max-w-2xl space-y-6">
-          <h1 className="text-5xl font-bold text-white tracking-tight">RamadanHub AI</h1>
-          <p className="text-xl text-gray-200">
-            Make this Ramadan more meaningful with AI-powered tools for your family, food, and festivities.
+    <div className="min-h-screen bg-background">
+      {/* Hero Section - Gradient from teal to deep navy */}
+      <section className="relative min-h-[520px] flex items-center justify-center text-center px-4 overflow-hidden bg-gradient-to-br from-teal-600 via-teal-700 to-slate-900 dark:from-slate-900 dark:via-teal-900 dark:to-slate-950">
+        {/* Decorative elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-teal-400/10 rounded-full blur-3xl animate-float-delayed" />
+          <div className="absolute top-40 right-1/4 w-32 h-32 bg-amber-300/5 rounded-full blur-2xl" />
+        </div>
+
+        <div className="relative z-10 max-w-3xl space-y-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-amber-200 text-sm font-medium">
+            ✨ AI-Powered Ramadan Companion
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-tight">
+            Make Ramadan<br />
+            <span className="bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">More Meaningful</span>
+          </h1>
+          <p className="text-xl text-teal-100/90 max-w-xl mx-auto leading-relaxed">
+            AI-powered tools for your family photos, meal planning, and gift ideas. Celebrate with purpose.
           </p>
-          <Link href="/login">
-            <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-8">
-              Get Started
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/login">
+              <Button variant="gold" size="xl" className="rounded-full min-w-[180px]">
+                Get Started <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="#features">
+              <Button variant="outline" size="xl" className="rounded-full min-w-[180px] bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white">
+                Learn More
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section className="max-w-6xl mx-auto px-4 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Our Features</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+      <section id="features" className="max-w-6xl mx-auto px-4 py-24">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Our Features</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Three powerful AI tools to enhance your Ramadan experience
+          </p>
+        </div>
 
+        <div className="grid md:grid-cols-3 gap-8">
           {/* Family Photo */}
-          <Card className="animate-fade-in-up stagger-1 hover:shadow-xl transition-all border-emerald-100 dark:border-emerald-900 dark:bg-slate-900 overflow-hidden group">
-            <div className="h-48 bg-emerald-50 dark:bg-emerald-950 relative flex items-center justify-center">
-              <Camera className="w-16 h-16 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
+          <Card className="animate-fade-in-up stagger-1 overflow-hidden group border-0 bg-gradient-to-b from-card to-accent/30 dark:from-card dark:to-accent/10">
+            <div className="h-48 bg-gradient-to-br from-teal-500/10 to-teal-600/20 dark:from-teal-500/20 dark:to-teal-600/30 relative flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+              <Camera className="w-16 h-16 text-teal-600 dark:text-teal-400 group-hover:scale-110 transition-transform relative z-10" />
             </div>
             <CardHeader>
-              <CardTitle className="text-emerald-700 dark:text-emerald-400">AI Family Photo</CardTitle>
-              <CardDescription className="dark:text-slate-400">Turn selfies into beautiful Eid family portraits.</CardDescription>
+              <CardTitle className="text-foreground group-hover:text-primary transition-colors">AI Family Photo</CardTitle>
+              <CardDescription>Turn selfies into beautiful Eid family portraits.</CardDescription>
             </CardHeader>
             <CardFooter>
               <Link href="/kartu/family" className="w-full">
-                <Button variant="outline" className="w-full border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <Button variant="teal" className="w-full group-hover:shadow-glow-teal transition-shadow">
                   Create Photo <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
@@ -63,17 +88,18 @@ export default function Home() {
           </Card>
 
           {/* Menu Generator */}
-          <Card className="animate-fade-in-up stagger-2 hover:shadow-xl transition-all border-orange-100 dark:border-orange-900 dark:bg-slate-900 overflow-hidden group">
-            <div className="h-48 bg-orange-50 dark:bg-orange-950 relative flex items-center justify-center">
-              <ChefHat className="w-16 h-16 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-transform" />
+          <Card className="animate-fade-in-up stagger-2 overflow-hidden group border-0 bg-gradient-to-b from-card to-accent/30 dark:from-card dark:to-accent/10">
+            <div className="h-48 bg-gradient-to-br from-amber-500/10 to-amber-600/20 dark:from-amber-500/20 dark:to-amber-600/30 relative flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+              <ChefHat className="w-16 h-16 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform relative z-10" />
             </div>
             <CardHeader>
-              <CardTitle className="text-orange-700 dark:text-orange-400">Review Menu</CardTitle>
-              <CardDescription className="dark:text-slate-400">Get a personalized Iftar & Sahur meal plan.</CardDescription>
+              <CardTitle className="text-foreground group-hover:text-primary transition-colors">Menu Planner</CardTitle>
+              <CardDescription>Get a personalized Iftar & Sahur meal plan.</CardDescription>
             </CardHeader>
             <CardFooter>
               <Link href="/menu" className="w-full">
-                <Button variant="outline" className="w-full border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                <Button variant="gold" className="w-full group-hover:shadow-glow-gold transition-shadow">
                   Plan Menu <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
@@ -81,29 +107,37 @@ export default function Home() {
           </Card>
 
           {/* Gift Recommendation */}
-          <Card className="animate-fade-in-up stagger-3 hover:shadow-xl transition-all border-purple-100 dark:border-purple-900 dark:bg-slate-900 overflow-hidden group">
-            <div className="h-48 bg-purple-50 dark:bg-purple-950 relative flex items-center justify-center">
-              <Gift className="w-16 h-16 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform" />
+          <Card className="animate-fade-in-up stagger-3 overflow-hidden group border-0 bg-gradient-to-b from-card to-accent/30 dark:from-card dark:to-accent/10">
+            <div className="h-48 bg-gradient-to-br from-teal-500/10 to-teal-600/20 dark:from-teal-500/20 dark:to-teal-600/30 relative flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+              <Gift className="w-16 h-16 text-teal-600 dark:text-teal-400 group-hover:scale-110 transition-transform relative z-10" />
             </div>
             <CardHeader>
-              <CardTitle className="text-purple-700 dark:text-purple-400">Gift Ideas</CardTitle>
-              <CardDescription className="dark:text-slate-400">Find thoughtful gifts for your loved ones.</CardDescription>
+              <CardTitle className="text-foreground group-hover:text-primary transition-colors">Gift Ideas</CardTitle>
+              <CardDescription>Find thoughtful gifts for your loved ones.</CardDescription>
             </CardHeader>
             <CardFooter>
               <Link href="/gift-ideas" className="w-full">
-                <Button variant="outline" className="w-full border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                <Button variant="teal" className="w-full group-hover:shadow-glow-teal transition-shadow">
                   Find Gifts <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
             </CardFooter>
           </Card>
-
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 text-center">
-        <p>&copy; {new Date().getFullYear()} RamadanHub AI. All rights reserved.</p>
+      <footer className="bg-slate-900 dark:bg-slate-950 text-slate-400 py-12">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center">
+              <span className="text-white text-lg">🌙</span>
+            </div>
+            <span className="font-semibold text-white">RamadanHub AI</span>
+          </div>
+          <p className="text-sm">&copy; {new Date().getFullYear()} RamadanHub AI. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );

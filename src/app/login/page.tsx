@@ -64,11 +64,11 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-950 p-4">
-            <Card className="w-full max-w-md shadow-lg border-opacity-50">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-accent/30 to-background p-4">
+            <Card className="w-full max-w-md shadow-warm-lg border-0 bg-card/95 backdrop-blur-sm">
                 <CardHeader className="space-y-1">
                     <CardTitle className="text-2xl font-bold tracking-tight text-center">
-                        RamadhanHub AI
+                        <span className="text-gradient-gold">RamadanHub</span> AI
                     </CardTitle>
                     <CardDescription className="text-center">
                         Sign in to access your spiritual dashboard
@@ -107,7 +107,7 @@ export default function LoginPage() {
                             <span className="w-full border-t" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white dark:bg-neutral-950 px-2 text-muted-foreground">
+                            <span className="bg-card px-2 text-muted-foreground">
                                 Or continue with
                             </span>
                         </div>

@@ -80,36 +80,36 @@ export function GenerationOverlay({ isVisible }: { isVisible: boolean }) {
     const CurrentIcon = STEPS[currentStepIndex]?.icon || Loader2;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-md transition-all duration-500">
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-emerald-100 p-8 text-center space-y-8 animate-in fade-in zoom-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md transition-all duration-500">
+            <div className="w-full max-w-md bg-card rounded-3xl shadow-warm-xl border-0 p-8 text-center space-y-8 animate-in fade-in zoom-in duration-300">
 
                 {/* Main Icon Animation */}
                 <div className="relative mx-auto w-24 h-24 flex items-center justify-center">
-                    <div className="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-20" />
-                    <div className="relative bg-gradient-to-tr from-emerald-500 to-teal-500 rounded-2xl p-5 shadow-lg shadow-emerald-200">
+                    <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping opacity-20" />
+                    <div className="relative bg-gradient-to-tr from-amber-500 to-yellow-500 rounded-2xl p-5 shadow-glow-gold">
                         <CurrentIcon className="w-12 h-12 text-white animate-pulse" />
                     </div>
                 </div>
 
                 <div className="space-y-4">
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <h3 className="text-2xl font-bold text-foreground">
                         {STEPS[currentStepIndex]?.label || "Processing..."}
                     </h3>
 
                     <div className="space-y-2">
-                        <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300 ease-out"
+                                className="h-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-300 ease-out"
                                 style={{ width: `${progress}%` }}
                             />
                         </div>
-                        <p className="text-sm text-gray-500 font-medium">{Math.round(progress)}%</p>
+                        <p className="text-sm text-muted-foreground font-medium">{Math.round(progress)}%</p>
                     </div>
                 </div>
 
                 {/* Fun Fact */}
-                <div className="bg-emerald-50/50 rounded-xl p-4 min-h-[80px] flex items-center justify-center">
-                    <p className="text-emerald-800 text-sm font-medium animate-in fade-in slide-in-from-bottom-2 duration-500 key-{factIndex}">
+                <div className="bg-accent/50 rounded-xl p-4 min-h-[80px] flex items-center justify-center">
+                    <p className="text-primary text-sm font-medium animate-in fade-in slide-in-from-bottom-2 duration-500 key-{factIndex}">
                         ✨ {FUN_FACTS[factIndex]}
                     </p>
                 </div>
