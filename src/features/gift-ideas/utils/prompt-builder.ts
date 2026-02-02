@@ -2,8 +2,9 @@
 
 import type { WizardState, RecipientType } from '../types'
 
-export function buildGiftPrompt(data: WizardState): string {
-  const recipientContext = getRecipientContext(data.recipient_type)
+export function buildGiftPrompt(data: WizardState, count: number = 5): string {
+  const recipientContext = getRecipientContext(data.recipient_type, data.gender)
+  const genderText = data.gender ? `Gender: ${data.gender === 'male' ? 'Male (Pria)' : 'Female (Wanita)'}` : ''
   const budgetFormatted = `Rp ${data.budget_min.toLocaleString('id-ID')} - Rp ${data.budget_max.toLocaleString('id-ID')}`
   const interestsText = data.interests.length > 0
     ? data.interests.join(', ')
@@ -16,6 +17,7 @@ export function buildGiftPrompt(data: WizardState): string {
 
 Context:
 - Recipient: ${recipientContext}
+- ${genderText}
 - Budget: ${budgetFormatted}
 - Interests/Hobbies: ${interestsText}
 - Occasion: ${getOccasionText(data.occasion)}
@@ -42,7 +44,7 @@ CRITICAL RULES - MUST FOLLOW:
    - State clearly which interest each gift addresses
 
 4. **BUDGET COMPLIANCE**
-   - ALL 5 prices MUST be within ${budgetFormatted}
+   - ALL ${count} prices MUST be within ${budgetFormatted}
    - Distribute prices across the range (don't cluster)
    - Include both affordable and premium options
 
@@ -51,9 +53,9 @@ CRITICAL RULES - MUST FOLLOW:
    - Respect Indonesian gift-giving customs
    - Consider recipient relationship dynamics
 
-Task: Generate EXACTLY 5 thoughtful, PHYSICALLY BUYABLE gift ideas.
+Task: Generate EXACTLY ${count} thoughtful, PHYSICALLY BUYABLE gift ideas.
 
-For EACH of the 5 gifts, provide:
+For EACH of the ${count} gifts, provide:
 - **name**: SPECIFIC product name in Indonesian (max 50 characters)
   Example: "Al-Quran Rainbow Tajwid A4" NOT "Premium Quran"
   
@@ -122,15 +124,18 @@ function detectConflicts(interests: string[]): boolean {
   )
 }
 
-function getRecipientContext(type: RecipientType): string {
+function getRecipientContext(type: RecipientType, gender?: 'male' | 'female'): string {
+  const isMale = gender === 'male'
+  const isFemale = gender === 'female'
+
   const contexts: Record<RecipientType, string> = {
-    parent: 'Parents (mother or father)',
-    spouse: 'Husband or wife (married partner)',
-    child: 'Son or daughter',
-    sibling: 'Brother or sister',
-    friend: 'Close friend or best friend',
+    parent: isMale ? 'Father (Ayah)' : isFemale ? 'Mother (Ibu)' : 'Parents (mother or father)',
+    spouse: isMale ? 'Husband (Suami)' : isFemale ? 'Wife (Istri)' : 'Spouse (Partner)',
+    child: isMale ? 'Son (Anak Laki-laki)' : isFemale ? 'Daughter (Anak Perempuan)' : 'Child',
+    sibling: isMale ? 'Brother (Kakak/Adik Laki-laki)' : isFemale ? 'Sister (Kakak/Adik Perempuan)' : 'Sibling',
+    friend: isMale ? 'Male Friend (Teman Pria)' : isFemale ? 'Female Friend (Teman Wanita)' : 'Close friend',
     colleague: 'Work colleague or business associate',
-    religious_leader: 'Ustadz, religious teacher, or imam'
+    religious_leader: isMale ? 'Ustadz / Kiai' : isFemale ? 'Ustadzah / Nyai' : 'Religious Leader'
   }
   return contexts[type]
 }

@@ -109,11 +109,16 @@ export function StepFour({
                             Ready to find the perfect gift?
                         </h3>
                         <p className="text-sm text-amber-700 dark:text-amber-300">
-                            Click "Generate Gift Ideas" to get 5 personalized gift recommendations powered by AI.
+                            Click "Generate Gift Ideas" to view your personalized recommendations.
                         </p>
-                        <p className="text-xs text-primary mt-2">
-                            💎 Cost: 10 credits
-                        </p>
+                        <div className="mt-3 flex flex-col gap-1 text-xs">
+                            <p className="text-primary font-medium flex items-center gap-1">
+                                💎 Premium: 10 Ideas (3 Credits)
+                            </p>
+                            <p className="text-amber-800/70 dark:text-amber-200/70 flex items-center gap-1">
+                                🎁 Free: 5 Ideas (0 Credits) - <span className="italic">Standard</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

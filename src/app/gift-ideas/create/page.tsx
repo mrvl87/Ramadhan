@@ -9,6 +9,7 @@ import { StepOne } from '@/features/gift-ideas/components/wizard/StepOne'
 import { StepTwo } from '@/features/gift-ideas/components/wizard/StepTwo'
 import { StepThree } from '@/features/gift-ideas/components/wizard/StepThree'
 import { StepFour } from '@/features/gift-ideas/components/wizard/StepFour'
+import { GenerationOverlay } from '@/features/gift-ideas/components/GenerationOverlay'
 import { generateGiftIdeas } from '@/features/gift-ideas/actions'
 import { useToast } from '@/hooks/use-toast'
 import type { WizardState, RecipientType, Occasion } from '@/features/gift-ideas/types'
@@ -22,6 +23,7 @@ export default function CreateGiftIdeasPage() {
 
     const [formData, setFormData] = useState<WizardState>({
         recipient_type: null as any,
+        gender: undefined,
         budget_min: 100000,
         budget_max: 500000,
         interests: [],
@@ -41,7 +43,7 @@ export default function CreateGiftIdeasPage() {
     const canProceed = () => {
         switch (currentStep) {
             case 1:
-                return formData.recipient_type !== null
+                return formData.recipient_type !== null && formData.gender !== undefined
             case 2:
                 return formData.budget_min > 0 && formData.budget_max >= formData.budget_min
             case 3:
@@ -111,7 +113,13 @@ export default function CreateGiftIdeasPage() {
 
     return (
         <ImageCacheProvider>
-            <div className="min-h-screen bg-background">
+            <div className="min-h-screen bg-background relative">
+                <GenerationOverlay
+                    isVisible={isGenerating}
+                    recipientType={formData.recipient_type || 'Penerima'}
+                    gender={formData.gender}
+                />
+
                 <div className="max-w-4xl mx-auto px-4 py-12">
                     {/* Header */}
                     <div className="text-center mb-8">
@@ -146,7 +154,9 @@ export default function CreateGiftIdeasPage() {
                         {currentStep === 1 && (
                             <StepOne
                                 value={formData.recipient_type}
+                                gender={formData.gender}
                                 onChange={(type) => updateField('recipient_type', type)}
+                                onGenderChange={(gender) => updateField('gender', gender)}
                             />
                         )}
 

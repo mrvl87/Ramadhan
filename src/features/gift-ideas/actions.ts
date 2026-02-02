@@ -4,11 +4,13 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { WizardState, GiftGeneration, GenerateGiftResponse, SaveGiftResponse } from './types'
 import { buildGiftPrompt } from './utils/prompt-builder'
-import { GIFT_GENERATION_COST } from './utils/constants'
+import { GIFT_COST_PREMIUM, GIFT_COST_FREE, GIFT_LIMIT_PREMIUM, GIFT_LIMIT_FREE } from './utils/constants'
 
 /**
  * Generate AI gift ideas based on wizard input
- * Deducts 10 credits from user account
+ * Freemium Model:
+ * - Premium: 10 ideas (Cost: 3 credits)
+ * - Free: 5 ideas (Cost: 0 credits)
  */
 export async function generateGiftIdeas(data: WizardState): Promise<GenerateGiftResponse> {
     try {
@@ -22,7 +24,7 @@ export async function generateGiftIdeas(data: WizardState): Promise<GenerateGift
             return { error: 'Please log in to generate gift ideas' }
         }
 
-        // 2. Check user credits
+        // 2. Check user credits and determine tier
         const { data: userData, error: userError } = await supabase
             .from('users')
             .select('credits')
@@ -34,14 +36,16 @@ export async function generateGiftIdeas(data: WizardState): Promise<GenerateGift
             return { error: 'Failed to check your credits' }
         }
 
-        if (!userData || userData.credits < GIFT_GENERATION_COST) {
-            return { error: `Insufficient credits. You need ${GIFT_GENERATION_COST} credits to generate gift ideas.` }
-        }
+        const credits = userData?.credits || 0
+        const isPremium = credits >= GIFT_COST_PREMIUM
 
-        console.log(`[GIFT] User ${user.id} has ${userData.credits} credits, generating gifts...`)
+        const limit = isPremium ? GIFT_LIMIT_PREMIUM : GIFT_LIMIT_FREE
+        const cost = isPremium ? GIFT_COST_PREMIUM : GIFT_COST_FREE
+
+        console.log(`[GIFT] User ${user.id} has ${credits} credits. Tier: ${isPremium ? 'PREMIUM' : 'FREE'}. Generating ${limit} gifts for ${cost} credits.`)
 
         // 3. Call OpenRouter API to generate gift ideas
-        const giftIdeas = await callOpenRouterAPI(data)
+        const giftIdeas = await callOpenRouterAPI(data, limit)
 
         if (!giftIdeas || giftIdeas.length === 0) {
             return { error: 'Failed to generate gift ideas. Please try again.' }
@@ -53,13 +57,14 @@ export async function generateGiftIdeas(data: WizardState): Promise<GenerateGift
             .insert({
                 user_id: user.id,
                 recipient_type: data.recipient_type,
+                gender: data.gender,
                 budget_min: data.budget_min,
                 budget_max: data.budget_max,
                 interests: data.interests,
                 occasion: data.occasion,
                 additional_notes: data.additional_notes,
                 gift_ideas: giftIdeas,
-                credits_used: GIFT_GENERATION_COST
+                credits_used: cost
             })
             .select()
             .single()
@@ -72,7 +77,7 @@ export async function generateGiftIdeas(data: WizardState): Promise<GenerateGift
         // 5. Deduct credits from user account
         const { error: updateError } = await supabase
             .from('users')
-            .update({ credits: userData.credits - GIFT_GENERATION_COST })
+            .update({ credits: userData.credits - cost })
             .eq('id', user.id)
 
         if (updateError) {
@@ -95,8 +100,8 @@ export async function generateGiftIdeas(data: WizardState): Promise<GenerateGift
 /**
  * Call OpenRouter API with Claude 3.5 Sonnet to generate gifts
  */
-async function callOpenRouterAPI(data: WizardState) {
-    const prompt = buildGiftPrompt(data)
+async function callOpenRouterAPI(data: WizardState, limit: number) {
+    const prompt = buildGiftPrompt(data, limit)
 
     console.log('[GIFT] Calling OpenRouter API...')
     console.log('[GIFT] 📝 Final Prompt being sent to OpenRouter:')

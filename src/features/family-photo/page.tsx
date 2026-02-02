@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import Image from 'next/image';
 import { GenerationOverlay } from '@/components/family-photo/GenerationOverlay';
 import { RamadhanPhotoWizard } from './components/wizard/RamadhanPhotoWizard';
-import { Download, Sparkles } from 'lucide-react';
+import { Download, Sparkles, Facebook, Share2 } from 'lucide-react';
 import { AIGenerationErrorBoundary, ImageUploadErrorBoundary } from '@/components/ui/error-boundary';
 import { useGenerationProgress } from '@/hooks/useGenerationProgress';
 import confetti from 'canvas-confetti';
@@ -125,17 +125,31 @@ export default function FamilyPhotoPage() {
                                             unoptimized
                                         />
                                         {/* Download Overlay - Always visible on mobile, hover on desktop */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent md:bg-black/40 md:opacity-0 md:group-hover:opacity-100 transition-all flex items-end justify-center p-4 md:p-6">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:bg-black/40 md:opacity-0 md:group-hover:opacity-100 transition-all flex flex-col justify-end p-4 md:p-6 space-y-3">
                                             <a
                                                 href={resultUrl}
                                                 download={`ramadhan-family-${Date.now()}.png`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                aria-label="Download generated family photo"
-                                                className="flex items-center justify-center gap-2 w-full bg-card text-primary py-3 rounded-xl font-bold hover:bg-accent shadow-warm-lg transition-all"
+                                                className="flex items-center justify-center gap-2 w-full bg-white text-slate-900 py-3.5 rounded-xl font-bold hover:bg-slate-100 shadow-warm-lg transition-all"
                                             >
                                                 <Download className="w-4 h-4" /> Download HD
                                             </a>
+
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <button
+                                                    onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://ramadhandna.ai')}&quote=${encodeURIComponent("Cobain bikin foto keluarga AI buat Lebaran, hasilnya bagus banget! ✨ #RamadanHubAI")}`, '_blank')}
+                                                    className="flex items-center justify-center gap-2 w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:bg-[#166fe5] shadow-lg transition-all"
+                                                >
+                                                    <Facebook className="w-4 h-4" /> Facebook
+                                                </button>
+                                                <button
+                                                    onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent("Eh cobain deh bikin foto keluarga AI di sini, gratis dan hasilnya estetik banget buat Lebaran! 🌙✨ https://ramadhandna.ai")}`, '_blank')}
+                                                    className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#20bd5a] shadow-lg transition-all"
+                                                >
+                                                    <Share2 className="w-4 h-4" /> WhatsApp
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 ) : isGenerating ? (

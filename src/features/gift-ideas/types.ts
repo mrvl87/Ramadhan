@@ -13,9 +13,12 @@ export type Occasion = 'ramadan' | 'eid' | 'both'
 
 export type EcommerceStore = 'Tokopedia' | 'Shopee' | 'Bukalapak' | 'Lazada'
 
+export type Gender = 'male' | 'female'
+
 // Wizard form state
 export interface WizardState {
     recipient_type: RecipientType
+    gender?: Gender
     budget_min: number
     budget_max: number
     interests: string[]
@@ -38,6 +41,7 @@ export interface GiftGeneration {
     id: string
     user_id: string
     recipient_type: RecipientType
+    gender?: Gender
     budget_min: number
     budget_max: number
     interests: string[]

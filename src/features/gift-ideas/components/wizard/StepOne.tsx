@@ -1,9 +1,10 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { RECIPIENT_TYPES } from '../../utils/constants'
-import type { RecipientType } from '../../types'
+import type { RecipientType, Gender } from '../../types'
 import { incrementImageView } from '../../image-actions'
 import { useEffect } from 'react'
 import Image from 'next/image'
@@ -11,10 +12,12 @@ import { useImageCache } from '../../contexts/ImageCacheContext'
 
 interface StepOneProps {
     value: RecipientType | null
+    gender: Gender | undefined
     onChange: (type: RecipientType) => void
+    onGenderChange: (gender: Gender) => void
 }
 
-export function StepOne({ value, onChange }: StepOneProps) {
+export function StepOne({ value, gender, onChange, onGenderChange }: StepOneProps) {
     const { recipientImages, loadingImages, getImage } = useImageCache()
 
     // Track image views when recipient is selected
@@ -143,6 +146,37 @@ export function StepOne({ value, onChange }: StepOneProps) {
                     )
                 })}
             </div>
+
+            {/* Gender Selection (Appears after Type Selection) */}
+            {value && (
+                <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="space-y-4 pt-4 border-t border-border"
+                >
+                    <div className="text-center">
+                        <h3 className="text-lg font-semibold text-foreground mb-2">
+                            Pilih Jenis Kelamin
+                        </h3>
+                        <div className="flex justify-center gap-4">
+                            <Button
+                                variant={gender === 'male' ? 'gold' : 'outline'}
+                                onClick={() => onGenderChange('male')}
+                                className="w-32 gap-2"
+                            >
+                                👨 Pria
+                            </Button>
+                            <Button
+                                variant={gender === 'female' ? 'gold' : 'outline'}
+                                onClick={() => onGenderChange('female')}
+                                className="w-32 gap-2"
+                            >
+                                👩 Wanita
+                            </Button>
+                        </div>
+                    </div>
+                </motion.div>
+            )}
 
             {/* Emotional Subtext */}
             {value && (

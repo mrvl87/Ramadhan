@@ -138,7 +138,9 @@ export const ECOMMERCE_STORES: Record<EcommerceStore, {
 }
 
 // Credits required for generation
-export const GIFT_GENERATION_COST = 10
+export const GIFT_COST_PREMIUM = 3
+export const GIFT_COST_FREE = 0
 
-// Max gifts per generation
-export const MAX_GIFTS_PER_GENERATION = 5
+// Gift limits per tier
+export const GIFT_LIMIT_PREMIUM = 10
+export const GIFT_LIMIT_FREE = 5
