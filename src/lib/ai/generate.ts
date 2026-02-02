@@ -32,7 +32,7 @@ interface GiftRecommendationInput extends BaseFeatureInput {
 }
 
 // Union type for all feature inputs
-type FeatureInput = 
+type FeatureInput =
     | (FamilyPhotoInput & { featureType: 'family-photo' })
     | (RamadanMenuInput & { featureType: 'ramadan-menu' })
     | (GiftRecommendationInput & { featureType: 'gift-recommendation' });
@@ -47,21 +47,41 @@ export async function generateContent({ featureType, userInput, userId }: Genera
     const supabase = await createClient();
 
     // 1. Check & Consume Credits (Unified Logic)
-    const { data: creditResult, error: creditError } = await supabase
-        .rpc('consume_credit', {
-            target_user_id: userId,
-            feature_name: featureType
-        });
+    let creditResult: any = { is_pro: false };
 
-    if (creditError || !creditResult) {
-        throw new Error('Insufficient credits or error checking balance.');
+    // START: Free Quota Logic for Family Photo
+    let usedFreeQuota = false;
+    if (featureType === 'family-photo') {
+        const { data: isFreeSuccess, error: freeError } = await supabase
+            .rpc('decrement_free_generations', { target_user_id: userId });
+
+        if (!freeError && isFreeSuccess === true) {
+            usedFreeQuota = true;
+            creditResult = { is_pro: true }; // Treat free generations as Pro quality
+            console.log(`[GENERATE] User ${userId} used FREE quota for ${featureType}`);
+        }
+    }
+    // END: Free Quota Logic
+
+    // If not using free quota, consume credits normally
+    if (!usedFreeQuota) {
+        const { data: cr, error: creditError } = await supabase
+            .rpc('consume_credit', {
+                target_user_id: userId,
+                feature_name: featureType
+            });
+
+        if (creditError || !cr) {
+            throw new Error('Insufficient credits or error checking balance.');
+        }
+        creditResult = cr;
     }
 
     // 2. Dispatch to specific AI Provider based on feature
     try {
         let result;
 
-switch (featureType) {
+        switch (featureType) {
             case 'family-photo':
                 // Fal.ai Generation
                 console.log("Triggering Fal.ai generation (via generateFalImage wrapper)...");
@@ -98,7 +118,7 @@ switch (featureType) {
                             image_url: finalUrl,
                             prompt: userInput.prompt,
                             feature_type: featureType,
-metadata: {
+                            metadata: {
                                 aspectRatio: photoInput.aspectRatio,
                                 style: photoInput.style, // if available in userInput
                                 promptOverride: photoInput.prompt !== photoInput.prompt // rough check or just store full prompt
@@ -128,27 +148,39 @@ metadata: {
 
         return result;
 
-} catch (error) {
+    } catch (error) {
         // Refund credit on failure to avoid charging users for failed generations
         console.error("AI Generation Failed:", error);
-        
+
         try {
-            const { error: refundError } = await supabase
-                .rpc('refund_credit', {
-                    target_user_id: userId,
-                    feature_name: featureType
-                });
-                
-            if (refundError) {
-                console.error("Failed to refund credit:", refundError);
-                // Log the refund failure but don't fail the request again
+            if (usedFreeQuota) {
+                // Refund free quota (Increment back)
+                const { error: refundError } = await supabase
+                    .rpc('increment_free_generations', { target_user_id: userId });
+
+                if (refundError) {
+                    console.error("Failed to refund free quota:", refundError);
+                } else {
+                    console.log("Free quota refunded successfully for failed generation");
+                }
             } else {
-                console.log("Credit refunded successfully for failed generation");
+                const { error: refundError } = await supabase
+                    .rpc('refund_credit', {
+                        target_user_id: userId,
+                        feature_name: featureType
+                    });
+
+                if (refundError) {
+                    console.error("Failed to refund credit:", refundError);
+                    // Log the refund failure but don't fail the request again
+                } else {
+                    console.log("Credit refunded successfully for failed generation");
+                }
             }
         } catch (refundError) {
-            console.error("Error during credit refund:", refundError);
+            console.error("Error during credit/quota refund:", refundError);
         }
-        
+
         throw error;
     }
 }

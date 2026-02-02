@@ -9,18 +9,27 @@ export async function GET(request: Request) {
 
     if (code) {
         const supabase = await createClient()
-        const { error } = await supabase.auth.exchangeCodeForSession(code)
-        if (!error) {
-            const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
+        const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+
+        if (!error && data?.user) {
+            // Check if user has a complete profile
+            const { data: profile } = await supabase
+                .from('users')
+                .select('full_name')
+                .eq('id', data.user.id)
+                .single()
+
             const isLocalEnv = process.env.NODE_ENV === 'development'
-            if (isLocalEnv) {
-                // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-                return NextResponse.redirect(`${origin}${next}`)
-            } else if (forwardedHost) {
-                return NextResponse.redirect(`https://${forwardedHost}${next}`)
-            } else {
-                return NextResponse.redirect(`${origin}${next}`)
+            const forwardedHost = request.headers.get('x-forwarded-host')
+            const base = isLocalEnv ? origin : `https://${forwardedHost}`
+
+            // If profile is incomplete (no full_name), redirect to onboarding
+            if (!profile?.full_name) {
+                return NextResponse.redirect(`${base}/onboarding`)
             }
+
+            // Otherwise proceed to requested page
+            return NextResponse.redirect(`${base}${next}`)
         }
     }
 

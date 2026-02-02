@@ -15,6 +15,8 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Loader2, Mail, Eye, EyeOff } from "lucide-react"
+import Link from "next/link"
+import { toast } from "sonner"
 
 export default function LoginPage() {
     const router = useRouter()
@@ -36,9 +38,34 @@ export default function LoginPage() {
                 password,
             })
 
-            if (error) throw error
+            if (error) {
+                if (error.message.includes("Email not confirmed")) {
+                    toast.error("Please verify your email address before logging in.")
+                    // Optional: You could offer to resend the link here
+                } else {
+                    throw error
+                }
+                setLoading(false)
+                return
+            }
+            const { data: { user } } = await supabase.auth.getUser()
 
-            router.push("/")
+            if (user) {
+                // Check profile completion
+                const { data: profile } = await supabase
+                    .from('users')
+                    .select('full_name')
+                    .eq('id', user.id)
+                    .single()
+
+                if (!profile?.full_name) {
+                    router.push("/onboarding")
+                } else {
+                    router.push("/")
+                }
+            } else {
+                router.push("/")
+            }
             router.refresh()
         } catch (err: any) {
             setError(err.message)
@@ -128,9 +155,12 @@ export default function LoginPage() {
                         <div className="grid gap-2">
                             <div className="flex items-center justify-between">
                                 <Label htmlFor="password">Password</Label>
-                                <a href="#" className="text-xs text-muted-foreground hover:text-primary underline-offset-4 hover:underline">
+                                <Link
+                                    href="/forgot-password"
+                                    className="text-xs text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+                                >
                                     Forgot password?
-                                </a>
+                                </Link>
                             </div>
                             <div className="relative">
                                 <Input
@@ -167,7 +197,13 @@ export default function LoginPage() {
                         </Button>
                     </form>
                 </CardContent>
-                <CardFooter className="flex flex-col gap-2">
+                <CardFooter className="flex flex-col gap-4">
+                    <div className="text-center text-sm">
+                        Don&apos;t have an account?{" "}
+                        <Link href="/signup" className="font-semibold text-primary hover:underline">
+                            Sign up
+                        </Link>
+                    </div>
                     <div className="text-xs text-center text-muted-foreground">
                         By clicking continue, you agree to our <a href="#" className="underline underline-offset-4 hover:text-primary">Terms of Service</a> and <a href="#" className="underline underline-offset-4 hover:text-primary">Privacy Policy</a>.
                     </div>

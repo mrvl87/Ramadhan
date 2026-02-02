@@ -1,0 +1,73 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - link "RamadanHub AI" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e9]: RamadanHub AI
+      - generic [ref=e10]:
+        - link "Home" [ref=e11] [cursor=pointer]:
+          - /url: /
+        - link "AI Card Generator" [ref=e12] [cursor=pointer]:
+          - /url: /kartu/family
+        - link "Menu Planner" [ref=e13] [cursor=pointer]:
+          - /url: /menu
+        - link "Gift Ideas" [ref=e14] [cursor=pointer]:
+          - /url: /gift-ideas
+        - link "Pricing" [ref=e15] [cursor=pointer]:
+          - /url: /pricing
+      - generic [ref=e16]:
+        - button [ref=e17] [cursor=pointer]:
+          - img
+        - link "Login" [ref=e18] [cursor=pointer]:
+          - /url: /login
+          - button "Login" [ref=e19]
+  - main [ref=e20]:
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e24]: RamadanHub AI
+        - generic [ref=e25]: Sign in to access your spiritual dashboard
+      - generic [ref=e26]:
+        - button "Continue with Google" [ref=e28] [cursor=pointer]:
+          - img
+          - text: Continue with Google
+        - generic [ref=e33]: Or continue with
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: Email
+            - textbox "Email" [ref=e37]:
+              - /placeholder: name@example.com
+              - text: test.user.1770012126866@example.com
+          - generic [ref=e38]:
+            - generic [ref=e39]:
+              - generic [ref=e40]: Password
+              - link "Forgot password?" [ref=e41] [cursor=pointer]:
+                - /url: /forgot-password
+            - generic [ref=e42]:
+              - textbox "Password" [ref=e43]: StrongPassword123!@#
+              - button [ref=e44] [cursor=pointer]:
+                - img [ref=e45]
+          - generic [ref=e48]: Invalid login credentials
+          - button "Sign In" [ref=e49] [cursor=pointer]
+      - generic [ref=e50]:
+        - generic [ref=e51]:
+          - text: Don't have an account?
+          - link "Sign up" [ref=e52] [cursor=pointer]:
+            - /url: /signup
+        - generic [ref=e53]:
+          - text: By clicking continue, you agree to our
+          - link "Terms of Service" [ref=e54] [cursor=pointer]:
+            - /url: "#"
+          - text: and
+          - link "Privacy Policy" [ref=e55] [cursor=pointer]:
+            - /url: "#"
+          - text: .
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e61] [cursor=pointer]:
+    - img [ref=e62]
+  - alert [ref=e65]
+```

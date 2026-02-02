@@ -1,0 +1,87 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - navigation:
+    - generic:
+      - generic:
+        - link:
+          - /url: /
+          - img
+          - generic: RamadanHub AI
+        - generic:
+          - link:
+            - /url: /
+            - text: Home
+          - link:
+            - /url: /kartu/family
+            - text: AI Card Generator
+          - link:
+            - /url: /menu
+            - text: Menu Planner
+          - link:
+            - /url: /gift-ideas
+            - text: Gift Ideas
+          - link:
+            - /url: /pricing
+            - text: Pricing
+        - generic:
+          - button:
+            - img
+          - link:
+            - /url: /login
+            - button: Login
+  - main:
+    - generic:
+      - generic:
+        - generic:
+          - generic: Create an Account
+          - generic: Join RamadanHub AI to start your spiritual journey
+        - generic:
+          - generic:
+            - generic:
+              - generic: Full Name
+              - textbox:
+                - /placeholder: e.g. Ahmad Fulan
+                - text: Weak User
+            - generic:
+              - generic:
+                - generic: Age
+                - spinbutton: "25"
+              - generic:
+                - generic: Gender
+                - combobox [expanded]:
+                  - generic: Select
+                  - img
+                - combobox
+            - generic:
+              - generic: Email
+              - textbox:
+                - /placeholder: name@example.com
+            - generic:
+              - generic:
+                - generic: Password
+                - button:
+                  - img
+                  - text: Generate Strong Password
+              - generic:
+                - textbox
+                - button:
+                  - img
+            - button: Sign Up
+        - generic:
+          - generic:
+            - text: Already have an account?
+            - link:
+              - /url: /login
+              - text: Sign in
+  - list
+  - button "Open Next.js Dev Tools" [ref=e6] [cursor=pointer]:
+    - img [ref=e7]
+  - alert
+  - listbox [ref=e10]:
+    - option "Male" [active] [ref=e11]:
+      - generic [ref=e13]: Male
+    - option "Female" [ref=e14]:
+      - generic [ref=e16]: Female
+```

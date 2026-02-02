@@ -14,68 +14,23 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter, usePathname } from 'next/navigation'
+import { useAuth } from '@/components/providers/AuthProvider'
 
 export function Navbar() {
     const [mounted, setMounted] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const [user, setUser] = useState<any>(null)
-    const [credits, setCredits] = useState<number>(0)
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    const { user, profile, isAdmin, signOut } = useAuth()
     const { theme, setTheme } = useTheme()
-    const router = useRouter()
     const pathname = usePathname()
 
+    // Navbar mounting only (theme related)
     useEffect(() => {
         setMounted(true)
-        fetchUserData()
     }, [])
 
-    const fetchUserData = async () => {
-        const supabase = createClient()
-        const { data: { user: authUser } } = await supabase.auth.getUser()
-
-        if (authUser) {
-            setUser(authUser)
-
-            // Fetch credits from users table
-            const { data: userData } = await supabase
-                .from('users')
-                .select('credits')
-                .eq('id', authUser.id)
-                .single()
-
-            if (userData) {
-                setCredits(userData.credits || 0)
-            }
-
-            // Check if user is admin
-            console.log('[NAVBAR] Checking admin status for user:', authUser.id)
-            const { data: adminData, error: adminError } = await supabase
-                .from('admins')
-                .select('role')
-                .eq('user_id', authUser.id)
-                .is('revoked_at', null)
-                .single()
-
-            console.log('[NAVBAR] Admin check result:', { adminData, adminError })
-
-            if (adminData) {
-                console.log('[NAVBAR] ✅ Setting isAdmin to TRUE')
-                setIsAdmin(true)
-            } else {
-                console.log('[NAVBAR] ❌ Not admin or query failed')
-            }
-        }
-    }
-
     const handleLogout = async () => {
-        const supabase = createClient()
-        await supabase.auth.signOut()
-
-        // Force full page reload to clear all state (including admin status)
-        window.location.href = '/login'
+        await signOut()
     }
 
     const navLinks = [
@@ -132,7 +87,7 @@ export function Navbar() {
                                     className="hidden md:flex items-center gap-2 font-semibold border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950"
                                 >
                                     <Coins className="w-4 h-4" />
-                                    <span>{credits}</span>
+                                    <span>{profile?.credits || 0}</span>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">credits</span>
                                 </Button>
                             </Link>
@@ -169,7 +124,7 @@ export function Navbar() {
                                 <DropdownMenuContent align="end" className="w-56">
                                     <DropdownMenuLabel>
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-medium">My Account</span>
+                                            <span className="text-sm font-medium">{profile?.full_name || 'My Account'}</span>
                                             <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
                                                 {user.email}
                                             </span>
@@ -197,7 +152,7 @@ export function Navbar() {
                                     <DropdownMenuItem asChild>
                                         <Link href="/pricing" className="flex items-center gap-2 cursor-pointer">
                                             <Coins className="w-4 h-4" />
-                                            <span>{credits} Credits</span>
+                                            <span>{profile?.credits || 0} Credits</span>
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
@@ -249,7 +204,7 @@ export function Navbar() {
                                     <Link href="/pricing" onClick={() => setMobileMenuOpen(false)}>
                                         <div className="flex items-center gap-2 mt-2 text-primary">
                                             <Coins className="w-4 h-4" />
-                                            <span className="text-sm font-semibold">{credits} Credits</span>
+                                            <span className="text-sm font-semibold">{profile?.credits || 0} Credits</span>
                                         </div>
                                     </Link>
                                 </div>
