@@ -3,6 +3,22 @@
 ## [Unreleased]
 
 ### Added
+- **v0.8.0 (Feb 02, 2026) - Robust Auth & Free Quota** 🎯 **CHECKPOINT: AUTH_V2**
+    - **Feature**: Global Authentication & Navbar Sync
+        - **Problem**: Navbar state (name, credits) didn't update immediately after login/logout using server actions alone.
+        - **Solution**: Implemented `AuthProvider.tsx` context that listens to Supabase `onAuthStateChange`.
+        - **Result**: Profile data (credits, name) syncs instantly across the app without manual refresh.
+    - **Feature**: Free Quota System with Refund Logic
+        - **Usage**: New users get 10 free generations for "Family Photo".
+        - **Refund Safety**: Added atomic refund logic (via `increment_free_generations` RPC). If an AI generation fails (e.g. API error), the quota is automatically refunded (+1) to the user.
+    - **Feature**: Enhanced Onboarding & Validation
+        - **Signup**: Added Password Strength Meter (Weak/Medium/Strong).
+        - **Validation**: Enforced password complexity policies on client-side.
+        - **Flow**: Improved transitions between Signup -> Email Check -> Login -> Onboarding (for missing names).
+    - **Testing**:
+        - Added **Playwright** framework for End-to-End (E2E) testing.
+        - Created `e2e/auth.spec.ts` covering Signup validation, Login errors, and Navbar states.
+
 - **v0.7.0 (Jan 27, 2026) - Admin Dashboard Phase 1** 🎯 **CHECKPOINT: ADMIN_DASHBOARD_V1**
     - **Feature**: Admin dashboard with authentication, metrics API, and UI
         - **Database Schema**:
