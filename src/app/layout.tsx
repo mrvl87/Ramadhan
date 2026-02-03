@@ -20,29 +20,30 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "RamadanHub AI - Your AI Companion for Ramadan",
+    default: "RamadanHub AI - Bring the Warmth of Ramadan Home",
     template: "%s | RamadanHub AI"
   },
-  description: "AI-powered tools for family photos, meal planning, and gift recommendations during Ramadan",
+  description: "Experience a meaningful Ramadan with AI. Create studio-quality family photos, plan healthy Sahur & Iftar meals, and find thoughtful gifts in seconds.",
+  keywords: ["Ramadan AI", "Muslim Family Photo", "Iftar Menu Planner", "Ramadan 2026", "AI Gift Ideas", "Halal Food Planner"],
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://ramadhandna.ai", // Placeholder domain, should be updated with actual
+    url: "https://ramadhandna.ai",
     siteName: "RamadanHub AI",
     images: [
       {
-        url: "/og-default.jpg", // We need to make sure this asset exists or is handled
+        url: "/og-ramadan.jpg", // Placeholder for when we have a real OG image
         width: 1200,
         height: 630,
-        alt: "RamadanHub AI Preview"
+        alt: "RamadanHub AI Homepage"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
     title: "RamadanHub AI",
-    description: "Celebrate Ramadan with AI-powered family photos and more.",
-    images: ["/og-default.jpg"]
+    description: "Bring the warmth of Ramadan home with AI-powered family photos and meal planning.",
+    images: ["/og-ramadan.jpg"]
   },
 };
 

@@ -35,7 +35,7 @@ export function Navbar() {
 
     const navLinks = [
         { href: '/', label: 'Home' },
-        { href: '/kartu/family', label: 'AI Card Generator' },
+        { href: '/kartu/family', label: 'AI Family Photos' },
         { href: '/menu', label: 'Menu Planner' },
         { href: '/gift-ideas', label: 'Gift Ideas' },
         { href: '/pricing', label: 'Pricing' },

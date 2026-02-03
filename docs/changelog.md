@@ -3,6 +3,31 @@
 ## [Unreleased]
 
 ### Added
+- **v0.8.0 (Feb 3, 2026) - Homepage Redesign & Structural Sync** 🎯 **CHECKPOINT: HOMEPAGE_REDESIGN**
+    - **Feature**: Complete overhaul of the Homepage (`/`).
+        - **Hero Section**:
+            - "Modern Heritage" aesthetic (Dark Teal/Amber gradients).
+            - Dynamic Split Layout (Copy Left, Visual Right).
+            - Integrated `HeroCarousel` with AI-generated assets (Fal.ai FLUX.1).
+        - **Narrative Components**:
+            - `HowItWorks`: 3-Step process explanation (Choose -> Create -> Share).
+            - `Features`: Zig-Zag showcase for Family Photo, Menu Planner, and Gift Ideas.
+        - **Social Proof**:
+            - `Testimonials`: Static review cards to build trust.
+            - `FAQ`: Accordion-style common questions.
+        - **Conversion**:
+            - `CTA`: High-contrast "Start Creating" banner.
+    - **Refactoring**:
+        - Centralized content in `src/config/landing-content.ts` (CMS-ready).
+        - Created reusable `Footer`, `Navbar` (updated links), and `GeometricPattern` components.
+        - Synced routing: `/family-photo` -> `/kartu/family`.
+    - **SEO**:
+        - Updated `layout.tsx` metadata with specific keywords and branding.
+        - Added `next-sitemap` ready structure.
+    - **Fixes**:
+        - Resolved `next/image` config for DiceBear and Unsplash.
+        - Fixed routing mismatches in Navbar and Footer.
+
 - **v0.7.0 (Jan 27, 2026) - Admin Dashboard Phase 1** 🎯 **CHECKPOINT: ADMIN_DASHBOARD_V1**
     - **Feature**: Admin dashboard with authentication, metrics API, and UI
         - **Database Schema**:
