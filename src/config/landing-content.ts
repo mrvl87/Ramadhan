@@ -1,15 +1,15 @@
 
 export const landingContent = {
     hero: {
-        badge: "✨ New: Free AI Family Photos",
-        headline: "Bring the Warmth of Ramadan Home",
-        subheadline: "Focus on your worship, let AI handle the rest. Create stunning family portraits, plan healthy meals, and find perfect gifts instantly.",
+        badge: "✨ Rayakan Ramadan dengan Teknologi AI Terkini",
+        headline: "Sempurnakan Momen Ramadan dalam Genggaman",
+        subheadline: "Dari potret keluarga yang hangat hingga rencana menu sehat—biarkan AI kami membantu Anda fokus sepenuhnya pada ibadah dan kebersamaan.",
         ctaPrimary: {
-            text: "Start Creating Free",
+            text: "Coba Gratis Sekarang",
             href: "/signup"
         },
         ctaSecondary: {
-            text: "Explore Features",
+            text: "Lihat Fitur",
             href: "#features"
         },
         // Visual assets for the 3D card effect (using existing placeholders or actual assets if available)
@@ -19,9 +19,9 @@ export const landingContent = {
             card3: { title: "Gift Ideas", icon: "Gift", color: "from-purple-500 to-pink-500" }
         },
         carouselImages: [
-            "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/homepage/family_gathering.jpg",
-            "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/homepage/delicious_iftar.jpg",
-            "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/homepage/gift_giving.jpg"
+            "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/homepage/family_gathering.jpg?t=20260206",
+            "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/homepage/delicious_iftar.jpg?t=20260206",
+            "https://hdfpxrbiofptltzsdlui.supabase.co/storage/v1/object/public/images/homepage/gift_giving.jpg?t=20260206"
         ]
     },
     howItWorks: {

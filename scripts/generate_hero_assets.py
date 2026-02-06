@@ -2,8 +2,10 @@ import os
 import requests
 import fal_client
 from supabase import create_client, Client
+from dotenv import load_dotenv
 
-# Configuration
+# Load from .env.local
+load_dotenv(dotenv_path=".env.local")
 SUPABASE_URL = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 # FAL_KEY is handled by fal_client lib automatically if in env
@@ -37,8 +39,12 @@ def generate_and_upload(item):
     print(f"Generating {item['name']}...")
     try:
         handler = fal_client.submit(
-            "fal-ai/flux/schnell",
-            arguments={"prompt": item["prompt"], "image_size": "landscape_4_3"}
+            "fal-ai/nano-banana",
+            arguments={
+                "prompt": item["prompt"],
+                "negative_prompt": "distorted faces, extra fingers, malformed limbs, unrealistic lighting, blurry, low resolution, cartoonish, watermark, text, signature",
+                "image_size": "landscape_4_3"
+            }
         )
         result = handler.get()
         image_url = result['images'][0]['url']
