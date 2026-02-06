@@ -15,20 +15,42 @@ export async function generateMenuAction(input: MenuInput) {
     const prompt = constructMenuPrompt(input);
 
     try {
-const result = await generateContent({
+        const result = await generateContent({
             featureType: 'ramadan-menu',
             userId: user.id,
             userInput: {
                 featureType: 'ramadan-menu',
                 prompt,
-                preferences: [input.theme], // Use theme as preference
+                preferences: [input.theme],
                 dietaryRestrictions: input.dietary ? [input.dietary] : []
             }
         });
 
-        return { success: true, data: result };
+        if (!result) throw new Error("No response from AI");
+
+        // Robust JSON Extraction
+        let cleanJson = result;
+        const jsonMatch = result.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            cleanJson = jsonMatch[0];
+        }
+
+        try {
+            const parsedData = JSON.parse(cleanJson);
+
+            // Basic validation
+            if (!parsedData.menu || !Array.isArray(parsedData.menu)) {
+                throw new Error("Invalid menu format received from AI");
+            }
+
+            return { success: true, data: parsedData };
+        } catch (parseError) {
+            console.error("JSON Parse Error:", parseError, "Raw:", result);
+            throw new Error("Failed to parse AI menu response. Please try again.");
+        }
 
     } catch (error: any) {
-        return { success: false, error: error.message };
+        console.error("Generation Action Error:", error);
+        return { success: false, error: error.message || "An unexpected error occurred" };
     }
 }
